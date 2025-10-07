@@ -19,7 +19,7 @@ const HeroSection = () => {
                     </Link>
                     <Link href="/game-projects/create">
                         <Button size="lg" variant="outline">
-                            Start Funding
+                            Create Project
                         </Button>
                     </Link>
                 </div>

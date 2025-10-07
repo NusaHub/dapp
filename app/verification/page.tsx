@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Loader from "@/components/Loader";
 import { toast } from "sonner";
-import { performVerification } from "./actions";
+import performVerification from "./actions";
 
 async function addVerifiedUser(vaultId: string) {
     console.log("Menambahkan user terverifikasi dengan vault ID:", vaultId);

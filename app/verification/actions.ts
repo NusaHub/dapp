@@ -2,27 +2,11 @@
 "use server";
 
 import IDAnalyzer from 'idanalyzer';
-import { PinataSDK } from "pinata-web3";
+import { uploadToIPFS } from "@/lib/global";
 
 const CoreAPI = new IDAnalyzer.CoreAPI(process.env.IDANALYZER_API_KEY!, "US");
-const pinata = new PinataSDK({
-    pinataJwt: process.env.PINATA_JWT!,
-    pinataGateway: process.env.PINATA_GATEWAY,
-});
 
-const uploadToIPFS = async (file: File) => {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        const upload = await pinata.upload.file(formData.get('file') as File);
-        return upload.IpfsHash;
-    } catch (error) {
-        console.error("Error uploading to IPFS:", error);
-        return null;
-    }
-};
-
-export async function performVerification(formData: FormData) {
+const performVerification = async (formData: FormData) => {
     const identityImage = formData.get('identityImage') as File | null;
     const faceImage = formData.get('faceImage') as File | null;
 
@@ -68,3 +52,5 @@ export async function performVerification(formData: FormData) {
         return { success: false, error: err.message || "An unknown error occurred." };
     }
 }
+
+export default performVerification;
