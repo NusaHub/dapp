@@ -11,18 +11,23 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { projectSchema, type ProjectFormValues } from "@/lib/validation"; 
+import { projectSchema, type ProjectFormValues } from "@/lib/validation";
 import { Trash2, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
-import createProjectAction from "./actions"; 
-import { toast } from "sonner"; 
+import createProjectAction from "./actions";
+import { toast } from "sonner";
 import Loader from "@/components/Loader";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 const CreateGameProjectPage = () => {
 
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false); 
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const form = useForm<z.infer<typeof projectSchema>>({
         resolver: zodResolver(projectSchema),
@@ -31,7 +36,7 @@ const CreateGameProjectPage = () => {
             description: "",
             devName: "",
             fundingTarget: 0,
-            milestones: [{ month: "", target: "", output: "" }],
+            milestones: [{ month: undefined, target: "" }],
             externalLinks: [],
         },
     });
@@ -49,7 +54,7 @@ const CreateGameProjectPage = () => {
     const router = useRouter();
 
     const onSubmit = async (values: ProjectFormValues) => {
-        setIsSubmitting(true); 
+        setIsSubmitting(true);
         try {
             const result = await createProjectAction(values);
 
@@ -66,7 +71,7 @@ const CreateGameProjectPage = () => {
                 description: "Please try again later.",
             });
         } finally {
-            setIsSubmitting(false); 
+            setIsSubmitting(false);
         }
     }
 
@@ -176,7 +181,6 @@ const CreateGameProjectPage = () => {
                             )}
                         />
                     </div>
-
                     <FormField
                         control={form.control}
                         name="fundingTarget"
@@ -195,14 +199,83 @@ const CreateGameProjectPage = () => {
                         <FormDescription>Define the development phases for your investors.</FormDescription>
                         <div className="space-y-4 mt-4">
                             {milestoneFields.map((field, index) => (
-                                <div key={field.id} className="flex flex-col md:flex-row gap-4 border p-4 rounded-lg">
-                                    <FormField control={form.control} name={`milestones.${index}.month`} render={({ field }) => <FormItem className="flex-1"><FormLabel>Month</FormLabel><FormControl><Input placeholder="e.g., January 2026" {...field} disabled={isSubmitting} /></FormControl><FormMessage /></FormItem>} />
-                                    <FormField control={form.control} name={`milestones.${index}.target`} render={({ field }) => <FormItem className="flex-1"><FormLabel>Target</FormLabel><FormControl><Input placeholder="Alpha Release" {...field} disabled={isSubmitting} /></FormControl><FormMessage /></FormItem>} />
-                                    <FormField control={form.control} name={`milestones.${index}.output`} render={({ field }) => <FormItem className="flex-1"><FormLabel>Output</FormLabel><FormControl><Input placeholder="Playable Demo for Investors" {...field} disabled={isSubmitting} /></FormControl><FormMessage /></FormItem>} />
-                                    <Button type="button" variant="destructive" size="icon" onClick={() => removeMilestone(index)} className="mt-auto"><Trash2 className="h-4 w-4" /></Button>
+                                <div key={field.id} className="flex flex-col md:flex-row gap-4 border p-4 rounded-lg items-start">
+                                    <FormField
+                                        control={form.control}
+                                        name={`milestones.${index}.month`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-col flex-1">
+                                                <FormLabel>Month</FormLabel>
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <FormControl>
+                                                            <Button
+                                                                variant={"outline"}
+                                                                disabled={isSubmitting}
+                                                                className={cn(
+                                                                    "w-full pl-3 text-left font-normal",
+                                                                    !field.value && "text-muted-foreground"
+                                                                )}
+                                                            >
+                                                                {field.value ? (
+                                                                    format(field.value, "MMMM yyyy")
+                                                                ) : (
+                                                                    <span>Pick a month</span>
+                                                                )}
+                                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                            </Button>
+                                                        </FormControl>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-auto p-0" align="start">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={field.value}
+                                                            onSelect={field.onChange}
+                                                            disabled={(date) => date < new Date()}
+                                                            initialFocus
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`milestones.${index}.target`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>Target</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="Alpha Release"
+                                                        {...field}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div className="flex-shrink-0">
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="icon"
+                                            onClick={() => removeMilestone(index)}
+                                            disabled={isSubmitting}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
                                 </div>
                             ))}
-                            <Button type="button" variant="outline" onClick={() => appendMilestone({ month: "", target: "", output: "" })}>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => appendMilestone({ month: undefined, target: "" })}
+                                disabled={isSubmitting}
+                            >
                                 <PlusCircle className="mr-2 h-4 w-4" /> Add Milestone
                             </Button>
                         </div>

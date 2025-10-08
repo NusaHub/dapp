@@ -16,10 +16,13 @@ export const projectSchema = z.object({
 
     milestones: z.array(
         z.object({
-            month: z.string().min(1, "Month must not be empty."),
-            target: z.string().min(3, "Milestone target must not be empty."),
-            output: z.string().min(3, "Output milestone must not be empty."),
+            month: z.date().optional(),
+            target: z.string().min(1, "Target must not be empty."),
         })
+            .refine(data => data.month !== undefined, {
+                message: "Month and year must be selected.",
+                path: ["month"],
+            })
     ).min(1, "At least one milestone is required."),
 
     externalLinks: z.array(
