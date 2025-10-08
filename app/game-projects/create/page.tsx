@@ -181,17 +181,58 @@ const CreateGameProjectPage = () => {
                             )}
                         />
                     </div>
-                    <FormField
-                        control={form.control}
-                        name="fundingTarget"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Funding Target (in IDR)</FormLabel>
-                                <FormControl><Input type="number" placeholder="50000000" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} disabled={isSubmitting} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    {/* --- Funding Section --- */}
+                    <div className="p-4 border rounded-lg space-y-4 bg-secondary/50">
+                        <FormField
+                            control={form.control}
+                            name="fundingCurrency"
+                            render={({ field }) => (
+                                <FormItem className="space-y-3">
+                                    <FormLabel>Funding Currency</FormLabel>
+                                    <FormControl>
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            className="flex items-center space-x-4"
+                                        >
+                                            <FormItem className="flex items-center space-x-2">
+                                                <FormControl><RadioGroupItem value="IDRX" disabled={isSubmitting} /></FormControl>
+                                                <FormLabel className="font-normal">IDRX</FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-2">
+                                                <FormControl><RadioGroupItem value="USDT" disabled={isSubmitting} /></FormControl>
+                                                <FormLabel className="font-normal">USDT</FormLabel>
+                                            </FormItem>
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="fundingTarget"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Funding Target (in {form.watch('fundingCurrency')})</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            placeholder="50000"
+                                            {...field}
+                                            min="0"
+                                            onChange={e => {
+                                                const value = parseFloat(e.target.value);
+                                                field.onChange(isNaN(value) || value < 0 ? 0 : value);
+                                            }}
+                                            disabled={isSubmitting}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
 
                     {/* --- Milestones --- */}
                     <div>

@@ -15,6 +15,9 @@ const Navbar = () => {
                     <Link href="/game-projects/create" className="text-muted-foreground hover:text-foreground transition-colors">
                         Create Game Project
                     </Link>
+                    <Link href="/verification" className="text-muted-foreground hover:text-foreground transition-colors">
+                        Verification
+                    </Link>
                 </div>
                 <Button>Connect Wallet</Button>
             </nav>

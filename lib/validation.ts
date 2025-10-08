@@ -12,7 +12,8 @@ export const projectSchema = z.object({
     devName: z.string().min(2, { message: "Developer name must be at least 2 characters long." }),
     genre: z.string().min(1, { message: "Genre must be selected." }),
     gameType: z.enum(['web2', 'web3']),
-    fundingTarget: z.number().positive({ message: "Funding target must be greater than 0." }),
+    fundingCurrency: z.enum(['IDRX', 'USDT']),
+    fundingTarget: z.number().nonnegative({ message: "Funding target cannot be negative." }),
 
     milestones: z.array(
         z.object({

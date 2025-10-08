@@ -1,9 +1,61 @@
-import React from 'react'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { type ProjectDetails } from "@/lib/types";
+import ProjectHeader from "@/components/ProjectHeader";
+import ProjectSidebar from "@/components/ProjectSidebar";
+import MilestoneAccordion from "@/components/MilestoneAccordion";
+import CommentSection from "@/components/CommentSection";
 
-const GameProjectDetailPage = () => {
+const dummyProject: ProjectDetails = {
+    id: "1",
+    gameImage: "https://placehold.co/800x450/8A42D4/FFFFFF?text=Skyborne+Legacy",
+    gameName: "Skyborne Legacy",
+    description: "Skyborne Legacy is a sprawling RPG set in a mystical archipelago where ancient magic and futuristic technology collide. Players embark on a heroic journey to uncover lost artifacts, tame mythical beasts, and shape the destiny of a world torn by conflict. With a dynamic storyline, deep character customization, and a vast open world, Skyborne Legacy offers an unforgettable adventure for every player.",
+    devName: "Nusantara Arts",
+    genre: "rpg",
+    gameType: "web3",
+    fundedAmount: 75000000,
+    fundingTarget: 200000000,
+    status: "Funding",
+    walletAddress: "0xAbCdEf1234567890AbCdEf1234567890AbCdEf12",
+    externalLinks: [
+        { title: "Official Website", url: "#" },
+        { title: "Gameplay Trailer", url: "#" },
+    ],
+    milestones: [
+        { id: "m1", month: new Date("2026-01-31"), target: "Alpha Release for early backers." },
+        { id: "m2", month: new Date("2026-04-30"), target: "Beta version with core mechanics implemented.", outputType: 'general', outputDescription: "Beta version v0.8 has been delivered to all backers." },
+        { id: "m3", month: new Date("2026-08-31"), target: "Full release on mainnet." }
+    ],
+    comments: [
+        {
+            id: "c1", author: "Investor A", avatarUrl: "https://placehold.co/40x40/000/FFF?text=A", timestamp: "2 hours ago", text: "This project looks amazing! Can't wait for the alpha.", replies: [
+                { id: "r1", author: "Nusantara Arts", avatarUrl: "https://placehold.co/40x40/8A42D4/FFF?text=D", timestamp: "1 hour ago", text: "Thank you for your support! We're working hard on it." }
+            ]
+        },
+        { id: "c2", author: "Gamer B", avatarUrl: "https://placehold.co/40x40/000/FFF?text=B", timestamp: "5 hours ago", text: "What engine is this game built on?" }
+    ]
+};
+
+const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
+    // Nantinya, gunakan params.id untuk fetch data proyek dari backend
+    // const project = await getProjectById(params.id);
+    const project = dummyProject;
+
     return (
-        <div>Game Project Detail Page</div>
-    )
+        <div className="container mx-auto max-w-7xl py-12 px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                <div className="lg:col-span-2 space-y-12">
+                    <ProjectHeader project={project} />
+                    <MilestoneAccordion milestones={project.milestones} />
+                    <CommentSection comments={project.comments} />
+                </div>
+
+                <div className="lg:col-span-1">
+                    <ProjectSidebar project={project} />
+                </div>
+            </div>
+        </div>
+    );
 }
 
-export default GameProjectDetailPage
+export default ProjectDetailPage;
