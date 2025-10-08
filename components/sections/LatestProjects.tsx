@@ -1,7 +1,9 @@
+import Link from 'next/link';
 import ProjectCard from '../ProjectCard';
 
 const dummyProjects = [
     {
+        id: '1',
         imageUrl: 'https://placehold.co/400x200/8A42D4/FFFFFF?text=Project+A',
         title: 'Skyborne Legacy',
         developer: 'Nusantara Arts',
@@ -12,6 +14,7 @@ const dummyProjects = [
         target: 200_000_000,
     },
     {
+        id: '2',
         imageUrl: 'https://placehold.co/400x200/1E40AF/FFFFFF?text=Project+B',
         title: 'Cyber Runner 2077',
         developer: 'Garuda Games',
@@ -22,6 +25,7 @@ const dummyProjects = [
         target: 180_000_000,
     },
     {
+        id: '3',
         imageUrl: 'https://placehold.co/400x200/BE123C/FFFFFF?text=Project+C',
         title: 'Archipelago Tycoon',
         developer: 'Dev Merah Putih',
@@ -41,8 +45,12 @@ const LatestProjects = () => {
                     Discover Innovative Games
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {dummyProjects.map((project, index) => (
-                        <ProjectCard key={index} {...project} />
+                    {dummyProjects.map((project) => (
+                        <Link href={`/game-projects/${project.id}`} key={project.id}>
+                            <div className="h-full">
+                                <ProjectCard {...project} />
+                            </div>
+                        </Link>
                     ))}
                 </div>
             </div>
