@@ -69,7 +69,7 @@ const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
             </div>
             <div className="p-6 rounded-lg border bg-card text-card-foreground">
                 <h3 className="font-semibold mb-2">External Links</h3>
-                <div className="space-y-2">
+                <div className="space-y-2 flex flex-col">
                     {project.externalLinks.map(link => (
                         <Link key={link.title} href={link.url} target="_blank" rel="noopener noreferrer">
                             <Button variant="link" className="p-0 h-auto">{link.title}</Button>
