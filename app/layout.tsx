@@ -22,12 +22,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${poppins.variable} font-sans dark antialiased`}
-      >
+    <html lang="en" className="dark">
+      <body className={`${poppins.variable} font-sans dark antialiased flex flex-col min-h-screen bg-background`}>
         <Navbar />
-        {children}
+        <main className="flex-grow flex flex-col">
+          {children}
+        </main>
         <Footer />
         <Toaster richColors theme="dark" position="top-right" />
       </body>

@@ -32,4 +32,6 @@ export type ProjectDetails = {
     externalLinks: { title: string; url: string; }[];
     milestones: Milestone[];
     comments: Comment[];
+    ownerId: string;
+    investorIds: string[];
 };

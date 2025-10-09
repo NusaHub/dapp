@@ -12,6 +12,12 @@ const Navbar = () => {
                     <Link href="/game-projects" className="text-muted-foreground hover:text-foreground transition-colors">
                         Game Projects
                     </Link>
+                    <Link href="/game-projects/my" className="text-muted-foreground hover:text-foreground transition-colors">
+                        My Game Projects
+                    </Link>
+                    <Link href="/game-projects/invested" className="text-muted-foreground hover:text-foreground transition-colors">
+                        Invested Game Projects
+                    </Link>
                     <Link href="/game-projects/create" className="text-muted-foreground hover:text-foreground transition-colors">
                         Create Game Project
                     </Link>
