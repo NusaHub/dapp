@@ -22,9 +22,9 @@ const dummyProject: ProjectDetails = {
         { title: "Gameplay Trailer", url: "#" },
     ],
     milestones: [
-        { id: "m1", month: new Date("2026-01-31"), target: "Alpha Release for early backers." },
-        { id: "m2", month: new Date("2026-04-30"), target: "Beta version with core mechanics implemented.", outputType: 'general', outputDescription: "Beta version v0.8 has been delivered to all backers." },
-        { id: "m3", month: new Date("2026-08-31"), target: "Full release on mainnet." }
+        { id: "m1", date: new Date("2026-01-31"), target: "Alpha Release for early backers." },
+        { id: "m2", date: new Date("2026-04-30"), target: "Beta version with core mechanics implemented.", outputType: 'general', outputDescription: "Beta version v0.8 has been delivered to all backers." },
+        { id: "m3", date: new Date("2026-08-31"), target: "Full release on mainnet." }
     ],
     comments: [
         {
@@ -33,7 +33,9 @@ const dummyProject: ProjectDetails = {
             ]
         },
         { id: "c2", author: "Gamer B", avatarUrl: "https://placehold.co/40x40/000/FFF?text=B", timestamp: "5 hours ago", text: "What engine is this game built on?" }
-    ]
+    ],
+    ownerId: "user123",
+    investorIds: ["user456", "user789"]
 };
 
 const ProjectDetailPage = ({ params }: { params: { id: string } }) => {

@@ -29,12 +29,10 @@ const CommentSection = ({ comments }: { comments: Comment[] }) => {
         <section>
             <h2 className="text-3xl font-bold mb-4">Discussion ({comments.length})</h2>
             <div className="space-y-6">
-                {/* Form untuk menambah komentar baru */}
                 <form className="flex flex-col gap-2">
                     <Textarea placeholder="Write a comment..." />
                     <Button className="self-end">Post Comment</Button>
                 </form>
-                {/* Daftar komentar */}
                 <div className="space-y-8">
                     {comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
                 </div>

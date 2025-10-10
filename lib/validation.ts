@@ -11,18 +11,18 @@ export const projectSchema = z.object({
     description: z.string().min(20, { message: "Description must be at least 20 characters long." }),
     devName: z.string().min(2, { message: "Developer name must be at least 2 characters long." }),
     genre: z.string().min(1, { message: "Genre must be selected." }),
-    gameType: z.enum(['web2', 'web3']),
-    fundingCurrency: z.enum(['IDRX', 'USDT']),
+    gameType: z.enum(['web2', 'web3'], { message: "Game type must be selected." }),
+    fundingCurrency: z.enum(['IDRX', 'USDT'], { message: "Funding currency must be selected." }),
     fundingTarget: z.number().nonnegative({ message: "Funding target cannot be negative." }),
 
     milestones: z.array(
         z.object({
-            month: z.date().optional(),
+            date: z.date().optional(),
             target: z.string().min(1, "Target must not be empty."),
         })
-            .refine(data => data.month !== undefined, {
-                message: "Month and year must be selected.",
-                path: ["month"],
+            .refine(data => data.date !== undefined, {
+                message: "Date must be selected.",
+                path: ["date"],
             })
     ).min(1, "At least one milestone is required."),
 

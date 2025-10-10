@@ -32,11 +32,9 @@ const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
 
             <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-3">
                 <h3 className="font-semibold text-center mb-4">Project Actions</h3>
-                {/* Tombol-tombol Aksi (Contoh Logika Kondisional) */}
-                {/* Asumsi: jika status 'Funding', investor bisa invest */}
+
                 {project.status === 'Funding' && <InvestDialog projectName={project.gameName} />}
 
-                {/* Asumsi: tombol lain untuk developer */}
                 <ActionAlertDialog
                     triggerText="Withdraw"
                     title="Are you sure you want to withdraw?"

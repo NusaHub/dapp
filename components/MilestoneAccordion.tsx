@@ -30,7 +30,7 @@ const MilestoneAccordion = ({ milestones }: { milestones: Milestone[] }) => {
                 {milestones.map((milestone) => (
                     <AccordionItem value={milestone.id} key={milestone.id}>
                         <AccordionTrigger className="text-lg hover:no-underline">
-                            {format(milestone.month, "MMMM yyyy")}
+                            {format(milestone.date, "dd MMMM yyyy")}
                         </AccordionTrigger>
                         <AccordionContent className="space-y-4">
                             <p><strong>Target:</strong> {milestone.target}</p>

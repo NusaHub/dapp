@@ -2,7 +2,7 @@ import { type ProjectDetails } from "./types";
 
 export const currentUserId = 'user-123';
 
-export const dummyProjects: (Omit<ProjectDetails, 'description' | 'milestones' | 'comments'> & { fundedAmount: number, fundingTarget: number, gameType: 'web2' | 'web3', status: string })[] = [
+export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 'comments'>[] = [
     {
         id: '1',
         gameImage: 'https://placehold.co/400x200/8A42D4/FFFFFF?text=Project+A',

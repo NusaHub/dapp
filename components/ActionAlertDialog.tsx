@@ -34,7 +34,9 @@ const ActionAlertDialog = ({ triggerText, title, description, onConfirm, variant
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={onConfirm}>Confirm</AlertDialogAction>
+                    <AlertDialogAction asChild>
+                        <Button variant={variant} onClick={onConfirm}>Confirm</Button>
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

@@ -36,7 +36,7 @@ export async function investInProject(values: z.infer<typeof investSchema>) {
         console.log("-> PANGGIL SMART CONTRACT: Transfer dana investasi", { from: user.walletAddress, amount, currency });
         console.log("-> PANGGIL BACKEND SERVER: Catat transaksi investasi dan update jumlah dana terkumpul untuk proyek", projectId);
 
-        revalidatePath(`/projects/${projectId}`);
+        revalidatePath(`/game-projects/${projectId}`);
         return { success: "Investment successful!" };
     } catch (error) {
         return { error: "An unexpected error occurred during investment." };
@@ -65,7 +65,7 @@ export async function submitMilestoneOutput(values: z.infer<typeof milestoneOutp
         console.log("--- PROSES SIMPAN OUTPUT MILESTONE ---");
         console.log("-> PANGGIL BACKEND SERVER: Simpan output untuk milestone", milestoneId, "dengan data:", outputData);
 
-        revalidatePath(`/projects/${projectId}`);
+        revalidatePath(`/game-projects/${projectId}`);
         return { success: "Milestone output saved successfully!" };
     } catch (error) {
         return { error: "Failed to save milestone output." };
@@ -92,7 +92,7 @@ export async function postComment(values: z.infer<typeof commentSchema>) {
         console.log("--- PROSES KIRIM KOMENTAR ---");
         console.log("-> PANGGIL BACKEND SERVER: Simpan komentar baru", { projectId, text, parentId, authorId: user.id });
 
-        revalidatePath(`/projects/${projectId}`);
+        revalidatePath(`/game-projects/${projectId}`);
         return { success: "Comment posted!" };
     } catch (error) {
         return { error: "Failed to post comment." };
@@ -112,7 +112,7 @@ export async function withdrawFunds(values: z.infer<typeof projectActionSchema>)
     console.log("-> PANGGIL SMART CONTRACT: Lakukan penarikan dana (withdraw) untuk milestone", milestoneId);
     console.log("-> PANGGIL BACKEND SERVER: Tandai milestone sebagai 'withdrawn' jika perlu");
 
-    revalidatePath(`/projects/${projectId}`);
+    revalidatePath(`/game-projects/${projectId}`);
     return { success: "Withdraw process initiated." };
 }
 
@@ -123,7 +123,7 @@ export async function cashOut(values: z.infer<typeof projectActionSchema>) {
     console.log("--- PROSES CASH OUT ---");
     console.log("-> PANGGIL SMART CONTRACT: Lakukan cash out sisa dana untuk proyek", projectId);
 
-    revalidatePath(`/projects/${projectId}`);
+    revalidatePath(`/game-projects/${projectId}`);
     return { success: "Cash out process initiated." };
 }
 
@@ -135,6 +135,6 @@ export async function voteOnMilestone(values: z.infer<typeof projectActionSchema
     console.log("--- PROSES VOTE MILESTONE ---");
     console.log("-> PANGGIL BACKEND SERVER atau SMART CONTRACT: Catat suara (vote) dari user", user.id, "untuk milestone", milestoneId);
 
-    revalidatePath(`/projects/${projectId}`);
+    revalidatePath(`/game-projects/${projectId}`);
     return { success: "Vote submitted." };
 }

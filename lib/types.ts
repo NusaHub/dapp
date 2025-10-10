@@ -1,6 +1,6 @@
 export type Milestone = {
     id: string;
-    month: Date;
+    date: Date;
     target: string;
     outputType?: 'general' | 'monetary';
     outputDescription?: string;

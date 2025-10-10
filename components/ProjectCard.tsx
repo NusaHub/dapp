@@ -29,8 +29,7 @@ const ProjectCard = ({
 
     return (
         <Card className="overflow-hidden hover:shadow-lg hover:shadow-primary/20 transition-shadow duration-300">
-            <CardHeader className="p-0 relative"> {/* <-- Tambah 'relative' */}
-                {/* Badge Status (Baru) */}
+            <CardHeader className="p-0 relative">
                 <Badge
                     className={cn(
                         "absolute top-4 right-4 z-10",

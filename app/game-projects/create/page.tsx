@@ -36,7 +36,7 @@ const CreateGameProjectPage = () => {
             description: "",
             devName: "",
             fundingTarget: 0,
-            milestones: [{ month: undefined, target: "" }],
+            milestones: [{ date: undefined, target: "" }],
             externalLinks: [],
         },
     });
@@ -56,6 +56,7 @@ const CreateGameProjectPage = () => {
     const onSubmit = async (values: ProjectFormValues) => {
         setIsSubmitting(true);
         try {
+            console.log("Submitting project:", values);
             const result = await createProjectAction(values);
 
             if (result.success) {
@@ -243,10 +244,10 @@ const CreateGameProjectPage = () => {
                                 <div key={field.id} className="flex flex-col md:flex-row gap-4 border p-4 rounded-lg items-start">
                                     <FormField
                                         control={form.control}
-                                        name={`milestones.${index}.month`}
+                                        name={`milestones.${index}.date`}
                                         render={({ field }) => (
                                             <FormItem className="flex flex-col flex-1">
-                                                <FormLabel>Month</FormLabel>
+                                                <FormLabel>Date</FormLabel>
                                                 <Popover>
                                                     <PopoverTrigger asChild>
                                                         <FormControl>
@@ -259,9 +260,9 @@ const CreateGameProjectPage = () => {
                                                                 )}
                                                             >
                                                                 {field.value ? (
-                                                                    format(field.value, "MMMM yyyy")
+                                                                    format(field.value, "dd MMMM yyyy")
                                                                 ) : (
-                                                                    <span>Pick a month</span>
+                                                                    <span>Pick a date</span>
                                                                 )}
                                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                             </Button>
@@ -314,7 +315,7 @@ const CreateGameProjectPage = () => {
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => appendMilestone({ month: undefined, target: "" })}
+                                onClick={() => appendMilestone({ date: undefined, target: "" })}
                                 disabled={isSubmitting}
                             >
                                 <PlusCircle className="mr-2 h-4 w-4" /> Add Milestone
@@ -350,4 +351,4 @@ const CreateGameProjectPage = () => {
     );
 }
 
-export default CreateGameProjectPage
+export default CreateGameProjectPage;
