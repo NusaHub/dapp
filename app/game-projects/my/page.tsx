@@ -1,6 +1,25 @@
+import { Metadata } from 'next'
 import Link from 'next/link';
 import ProjectCard from '@/components/ProjectCard';
 import { dummyProjects, currentUserId } from '@/lib/dummy-data';
+
+export const metadata: Metadata = {
+    title: "My Game Projects",
+    description: "Manage and view the status of all game projects you've created on NusaHub. Track funding progress, manage milestones, and communicate with your investors.",
+    keywords: "my projects, game management, project dashboard, game funding, developer portal",
+    alternates: {
+        canonical: '/game-projects/my',
+    },
+    openGraph: {
+        title: "My Game Projects - NusaHub",
+        description: "Manage and view the status of all game projects you've created on NusaHub. Track funding progress and manage milestones.",
+        url: "https://nusahub.io/game-projects/my",
+    },
+    twitter: {
+        title: "My Game Projects - NusaHub",
+        description: "Manage and view the status of all game projects you've created on NusaHub. Track funding progress and manage milestones.",
+    }
+}
 
 export default function MyGameProjectsPage() {
 

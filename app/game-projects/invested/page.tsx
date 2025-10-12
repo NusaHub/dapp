@@ -1,7 +1,26 @@
 import React from 'react'
+import { Metadata } from 'next'
 import Link from 'next/link';
 import ProjectCard from '@/components/ProjectCard';
 import { dummyProjects, currentUserId } from '@/lib/dummy-data';
+
+export const metadata: Metadata = {
+    title: "My Invested Projects",
+    description: "Track the progress of game projects you've supported and invested in. Monitor development milestones and stay updated on your gaming investments.",
+    keywords: "invested projects, investment tracking, game investment, project monitoring, investor dashboard",
+    alternates: {
+        canonical: '/game-projects/invested',
+    },
+    openGraph: {
+        title: "My Invested Projects - NusaHub",
+        description: "Track the progress of game projects you've supported and invested in. Monitor development milestones and stay updated.",
+        url: "https://nusahub.io/game-projects/invested",
+    },
+    twitter: {
+        title: "My Invested Projects - NusaHub",
+        description: "Track the progress of game projects you've supported and invested in. Monitor development milestones and stay updated.",
+    }
+}
 
 const InvestedGameProjectsPage = () => {
 

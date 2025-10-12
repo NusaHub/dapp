@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { type Metadata } from "next";
 import { type ProjectDetails } from "@/lib/types";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectSidebar from "@/components/ProjectSidebar";
@@ -37,6 +38,45 @@ const dummyProject: ProjectDetails = {
     ownerId: "user123",
     investorIds: ["user456", "user789"]
 };
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+    // In a real app, you would fetch the project data here
+    // const project = await getProjectById(params.id);
+    const project = dummyProject; // Using dummy data for now
+
+    return {
+        title: `${project.gameName} - Game Project`,
+        description: project.description.length > 160
+            ? project.description.substring(0, 160) + "..."
+            : project.description,
+        keywords: `${project.gameName}, ${project.devName}, ${project.genre}, ${project.gameType}, game funding, indie game, web3 gaming`,
+        alternates: {
+            canonical: `/game-projects/${params.id}`,
+        },
+        openGraph: {
+            title: `${project.gameName} - Game Project - NusaHub`,
+            description: project.description.length > 160
+                ? project.description.substring(0, 160) + "..."
+                : project.description,
+            url: `https://nusahub.io/game-projects/${params.id}`,
+            images: [
+                {
+                    url: project.gameImage,
+                    width: 800,
+                    height: 450,
+                    alt: project.gameName,
+                }
+            ],
+        },
+        twitter: {
+            title: `${project.gameName} - Game Project - NusaHub`,
+            description: project.description.length > 160
+                ? project.description.substring(0, 160) + "..."
+                : project.description,
+            images: [project.gameImage],
+        }
+    };
+}
 
 const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
     // Nantinya, gunakan params.id untuk fetch data proyek dari backend

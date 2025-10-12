@@ -1,0 +1,49 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background matching website theme -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Central content positioned in center -->
+  <g transform="translate(600, 315)">
+    <!-- Main "NusaHub" text -->
+    <text x="0" y="-20" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-weight="900" font-size="80" fill="url(#titleGradient)" letter-spacing="-0.02em">
+      NusaHub
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="0" y="40" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-weight="400" font-size="32" fill="#e6edf3" opacity="0.8" letter-spacing="-0.01em">
+      Decentralized Game Funding Platform
+    </text>
+  </g>
+  
+  <!-- Decorative gradient elements -->
+  <circle cx="150" cy="100" r="8" fill="url(#accentGradient)" opacity="0.4"/>
+  <circle cx="1050" cy="150" r="12" fill="url(#accentGradient)" opacity="0.3"/>
+  <circle cx="200" cy="500" r="6" fill="url(#accentGradient)" opacity="0.5"/>
+  <circle cx="1000" cy="480" r="10" fill="url(#accentGradient)" opacity="0.3"/>
+  
+  <!-- Additional decorative elements -->
+  <circle cx="100" cy="300" r="4" fill="#8a42d4" opacity="0.6"/>
+  <circle cx="1100" cy="350" r="6" fill="#7c3aed" opacity="0.5"/>
+  
+  <!-- Gradients matching website theme -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#161b22;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#21262d;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="titleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e6edf3;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#8a42d4;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8a42d4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
