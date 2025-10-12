@@ -1,7 +1,26 @@
 import React from 'react'
+import { Metadata } from 'next'
 import Link from 'next/link';
 import ProjectCard from '@/components/ProjectCard';
 import { dummyProjects } from '@/lib/dummy-data';
+
+export const metadata: Metadata = {
+    title: "All Game Projects",
+    description: "Discover and support the next generation of games. Browse through innovative gaming projects seeking funding from investors on the NusaHub platform.",
+    keywords: "game projects, indie games, web3 games, game funding, blockchain gaming, gaming investment opportunities",
+    alternates: {
+        canonical: '/game-projects',
+    },
+    openGraph: {
+        title: "All Game Projects - NusaHub",
+        description: "Discover and support the next generation of games. Browse through innovative gaming projects seeking funding from investors.",
+        url: "https://nusahub.io/game-projects",
+    },
+    twitter: {
+        title: "All Game Projects - NusaHub",
+        description: "Discover and support the next generation of games. Browse through innovative gaming projects seeking funding from investors.",
+    }
+}
 
 const GameProjectsPage = () => {
 
