@@ -8,6 +8,7 @@ import InvestDialog from "./InvestDialog";
 import ActionAlertDialog from "./ActionAlertDialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import CountdownTimer from "./CountdownTimer";
 
 const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
 
@@ -16,24 +17,47 @@ const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
         toast.success("Wallet address copied to clipboard!");
     };
 
+    const isInvestDisabled = project.status !== 'Funding';
+
     return (
         <aside className="sticky top-24 space-y-6">
-            <div className="p-6 rounded-lg border bg-card text-card-foreground">
-                <h2 className="text-2xl font-semibold">Funding Status</h2>
-                <p className="text-sm text-muted-foreground mb-4">{project.status}</p>
-                <Progress value={(project.fundedAmount / project.fundingTarget) * 100} className="mb-2" />
-                <p className="text-xl font-bold text-primary">
-                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(project.fundedAmount)}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                    raised of {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(project.fundingTarget)}
-                </p>
+            <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-4">
+                <div className="pb-4 border-b">
+                    {project.status === 'Not funded yet' && (
+                        <CountdownTimer
+                            targetDate={project.fundingStartDate}
+                            title="Funding Starts In"
+                            endMessage="Funding is about to begin!"
+                        />
+                    )}
+                    {project.status === 'Funding' && (
+                        <CountdownTimer
+                            targetDate={project.fundingEndDate}
+                            title="Funding Ends In"
+                            endMessage="Funding has ended!"
+                        />
+                    )}
+                </div>
+                <div>
+                    <h2 className="text-2xl font-semibold">Funding Status</h2>
+                    <p className="text-sm text-muted-foreground mb-4">{project.status}</p>
+                    <Progress value={(project.fundedAmount / project.fundingTarget) * 100} className="mb-2" />
+                    <p className="text-xl font-bold text-primary">
+                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(project.fundedAmount)}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                        raised of {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(project.fundingTarget)}
+                    </p>
+                </div>
             </div>
 
             <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-3">
                 <h3 className="font-semibold text-center mb-4">Project Actions</h3>
 
-                {project.status === 'Funding' && <InvestDialog projectName={project.gameName} />}
+                <InvestDialog
+                    projectName={project.gameName}
+                    disabled={isInvestDisabled}
+                />
 
                 <ActionAlertDialog
                     triggerText="Withdraw"
@@ -52,7 +76,9 @@ const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
                     triggerText="Vote on Milestone"
                     title="Do you approve this milestone?"
                     description="Your vote will be recorded on the blockchain."
-                    onConfirm={() => toast.info("Your vote has been submitted.")}
+                    type="vote"
+                    onApprove={() => toast.success("Milestone approved! Vote recorded on blockchain.")}
+                    onReject={() => toast.error("Milestone rejected! Vote recorded on blockchain.")}
                 />
             </div>
 

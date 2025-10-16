@@ -1,4 +1,4 @@
-export default function Loading() {
+const Loading = () => {
     return (
         <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
             <div className="text-center max-w-md mx-auto px-6">
@@ -17,3 +17,5 @@ export default function Loading() {
         </div>
     )
 }
+
+export default Loading;
