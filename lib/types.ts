@@ -27,11 +27,13 @@ export type ProjectDetails = {
     gameType: 'web2' | 'web3';
     fundedAmount: number;
     fundingTarget: number;
-    status: 'Funding' | 'Fully Funded';
+    status: 'Not funded yet' | 'Funding' | 'Fully Funded';
     walletAddress: string;
     externalLinks: { title: string; url: string; }[];
     milestones: Milestone[];
     comments: Comment[];
     ownerId: string;
     investorIds: string[];
+    fundingEndDate: Date;
+    fundingStartDate: Date;
 };

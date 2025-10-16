@@ -6,11 +6,11 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 
-const InvestDialog = ({ projectName }: { projectName: string }) => {
+const InvestDialog = ({ projectName, disabled }: { projectName: string, disabled?: boolean }) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="w-full">Invest in Project</Button>
+                <Button className="w-full" disabled={disabled}>Invest in Project</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
