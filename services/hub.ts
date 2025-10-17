@@ -135,8 +135,6 @@ export async function getProject(projectId: number) {
   }
 }
 
-// buat tau user udah invest berapa di suatu projek
-// READ FUNCTION
 export async function getFundingByUser(projectId: number, user: string) {
   try {
     const result = await readContract(config, {

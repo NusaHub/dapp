@@ -1,12 +1,15 @@
 import { NusaHub_abi } from "@/abi/NusaHub_abi";
 import { config } from "@/components/provider/Web3Provider";
 import { readContract, writeContract } from "wagmi/actions";
-import { NUSA_GOVERNOR, NUSA_HUB } from "./network";
+import { NUSA_GOVERNOR } from "./network";
 import { NusaGovernor_abi } from "@/abi/NusaGovernor_abi";
 import { encodeFunctionData } from "viem";
 import { keccak256, toUtf8Bytes } from "ethers";
 import { getCountdownFromBlockNumber } from "./helper/converter";
 
+// sebelum updateProgress, harus panggil ini dulu buat dapetin proposalId
+// proposalId nanti baru dimasukkin ke paramnya updateProgress di hub.ts
+// WRITE FUNCTION
 export async function proposeProgress(description: string, projectId: number) {
   try {
     const calldata = encodeFunctionData({
@@ -21,12 +24,15 @@ export async function proposeProgress(description: string, projectId: number) {
       functionName: "proposeProgress",
       args: [[NusaHub_abi], [0], [calldata], description],
     });
-    return result;
+    return Number(result);
   } catch (error) {
     console.error(error);
   }
 }
 
+// buat voting bos progressnya
+// vote itu 0 berarti against atau nolak, 1 berarti setuju
+// WRITE FUNCTION
 export async function voteProgress(proposalId: number, vote: number) {
   try {
     const result = await writeContract(config, {
@@ -41,6 +47,9 @@ export async function voteProgress(proposalId: number, vote: number) {
   }
 }
 
+// perlu progress yang udah disetujui (kalo waktu votingnya udah habis), perlu ditekan execute manual oleh game ownernya
+// biar tokennya bisa masuk ke dee
+// WRITE FUNCTION
 export async function execute(projectId: number, description: string) {
   try {
     const calldata = encodeFunctionData({
@@ -67,6 +76,8 @@ export async function execute(projectId: number, description: string) {
   }
 }
 
+// buat tahu ae jumlah votenya berapa, yang setuju berapa yang nolak berapa
+// READ FUNCTION
 export async function proposalVotes(proposalId: number) {
   try {
     const result = await readContract(config, {
@@ -83,6 +94,14 @@ export async function proposalVotes(proposalId: number) {
   }
 }
 
+// ini paling susah
+// tugasnya ini itu ngecek functionnya di fase apa
+// 0 berarti Pending
+// 1 berarti Active
+// 3 berarti Defeated (banyak yang vote no)
+// 4 berarti Succeeded (banyak yang vote yes)
+// 7 berarti Executed (udah dieksekusi)
+// READ FUNCTION (enum)
 export async function state(proposalId: number) {
   try {
     const state = await readContract(config, {
@@ -91,13 +110,18 @@ export async function state(proposalId: number) {
       functionName: "state",
       args: [proposalId],
     });
-    return state;
+    return Number(state);
   } catch (error) {
     console.error(error);
     return;
   }
 }
 
+// dipake biar tahu votenya start di block ke berapa, cara implementasi cek 2 ini
+// QuestDetail --> https://github.com/NusaQuest/frontend/blob/main/src/pages/QuestDetail.jsx
+// Countdown --> https://github.com/NusaQuest/frontend/blob/main/src/components/sections/Countdown.jsx
+// referensi kalo mau bikin countdown yang getCountdown (beda dari ini gapa kok aman) --> https://github.com/NusaQuest/frontend/blob/main/src/utils/helper.js
+// READ FUNCTION
 export async function proposalSnapshot(proposalId: number) {
   try {
     const snapshot = await readContract(config, {
@@ -114,6 +138,11 @@ export async function proposalSnapshot(proposalId: number) {
   }
 }
 
+// dipake biar tahu votenya selesai di block ke berapa, cara implementasi cek 2 ini
+// QuestDetail --> https://github.com/NusaQuest/frontend/blob/main/src/pages/QuestDetail.jsx
+// Countdown --> https://github.com/NusaQuest/frontend/blob/main/src/components/sections/Countdown.jsx
+// referensi kalo mau bikin countdown yang getCountdown (beda dari ini gapa kok aman) --> https://github.com/NusaQuest/frontend/blob/main/src/utils/helper.js
+// READ FUNCTION
 export async function proposalDeadline(proposalId: number) {
   try {
     const deadline = await readContract(config, {
