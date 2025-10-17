@@ -24,6 +24,7 @@ export async function nusaBalance(address: string) {
 }
 
 // jadi nanti kalo investor mau fund project pake IDRX, sebelumnya dia harus run ini dulu
+// tambahin modal ya buat nanya approve ini kayak kalimate "Before investing, please allow NusaHub to use your IDRX tokens for this transaction."
 // fundAmount yang di parameter ini harus sama dengan yang dia invest di projek ini
 // WRITE FUNCTION
 export async function idrxApprove(fundAmount: number) {
@@ -42,6 +43,7 @@ export async function idrxApprove(fundAmount: number) {
 }
 
 // jadi nanti kalo investor mau fund project pake USDT, sebelumnya dia harus run ini dulu
+// tambahin modal ya buat nanya approve ini kayak kalimate "Before investing, please allow NusaHub to use your USDT tokens for this transaction."
 // fundAmount yang di parameter ini harus sama dengan yang dia invest di projek ini
 // WRITE FUNCTION
 export async function usdtApprove(fundAmount: number) {
