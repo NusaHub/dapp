@@ -40,7 +40,17 @@ const MilestoneAccordion = ({ milestones }: { milestones: Milestone[] }) => {
         {milestones.map((milestone) => (
           <AccordionItem value={milestone.id} key={milestone.id}>
             <AccordionTrigger className="text-lg hover:no-underline">
-              {format(milestone.date, "dd MMMM yyyy")}
+              <div className="flex items-center justify-between w-full mr-4">
+                <span>{format(milestone.date, "dd MMMM yyyy")}</span>
+                <div className="flex items-center gap-3">
+                  {/* Vote Count */}
+                  {milestone.voteCount && (
+                    <span className="text-sm text-muted-foreground">
+                      {milestone.voteCount} votes
+                    </span>
+                  )}
+                </div>
+              </div>{" "}
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
               <p>

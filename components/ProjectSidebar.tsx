@@ -11,23 +11,22 @@ import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
 import { cashOut } from "@/services/hub";
 
-const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
+interface ProjectSidebarProps {
+  project: ProjectDetails;
+  userInvestmentAmount: number;
+}
+
+
+
+const ProjectSidebar = ({
+  project,
+  userInvestmentAmount,
+}: ProjectSidebarProps) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(project.walletAddress);
     toast.success("Wallet address copied to clipboard!");
   };
-
   const isInvestDisabled = project.status == "Fully Funded";
-interface ProjectSidebarProps {
-    project: ProjectDetails;
-    userInvestmentAmount: number;
-}
-
-const ProjectSidebar = ({ project, userInvestmentAmount }: ProjectSidebarProps) => {
-    const handleCopy = () => {
-        navigator.clipboard.writeText(project.walletAddress);
-        toast.success("Wallet address copied to clipboard!");
-    };
 
   const onCashOut = async () => {
     toast.info("Cash out process initiated.");
@@ -97,44 +96,17 @@ const ProjectSidebar = ({ project, userInvestmentAmount }: ProjectSidebarProps) 
                 }).format(project.fundingTarget)}
               </p>
 
-            {userInvestmentAmount > 0 && (
+              {userInvestmentAmount > 0 && (
                 <div className="p-6 rounded-lg border bg-card text-card-foreground">
-                    <h3 className="font-semibold mb-2">Your Investment</h3>
-                    <p className="text-xl font-bold">
-                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(userInvestmentAmount)}
-                    </p>
+                  <h3 className="font-semibold mb-2">Your Investment</h3>
+                  <p className="text-xl font-bold">
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(userInvestmentAmount)}
+                  </p>
                 </div>
-            )}
-
-            <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-3">
-                <h3 className="font-semibold text-center mb-4">Project Actions</h3>
-
-                <InvestDialog
-                    projectName={project.gameName}
-                    disabled={isInvestDisabled}
-                />
-
-                <ActionAlertDialog
-                    triggerText="Withdraw"
-                    title="Are you sure you want to withdraw?"
-                    description="This action will initiate the milestone withdrawal process."
-                    onConfirm={() => toast.info("Withdraw process initiated.")}
-                />
-                <ActionAlertDialog
-                    triggerText="Cash Out"
-                    title="Are you sure you want to cash out?"
-                    description="This will cash out the remaining funds after project completion."
-                    onConfirm={() => toast.info("Cash out process initiated.")}
-                    variant="destructive"
-                />
-                <ActionAlertDialog
-                    triggerText="Vote on Milestone"
-                    title="Do you approve this milestone?"
-                    description="Your vote will be recorded on the blockchain."
-                    type="vote"
-                    onApprove={() => toast.success("Milestone approved! Vote recorded on blockchain.")}
-                    onReject={() => toast.error("Milestone rejected! Vote recorded on blockchain.")}
-                />
+              )}
             </div>
           )}
         </div>
@@ -142,29 +114,6 @@ const ProjectSidebar = ({ project, userInvestmentAmount }: ProjectSidebarProps) 
 
       <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-3">
         <h3 className="font-semibold text-center mb-4">Project Actions</h3>
-            <div className="p-6 rounded-lg border bg-card text-card-foreground">
-                <h3 className="font-semibold mb-2">Project Wallet</h3>
-                <div className="flex items-center gap-2">
-                    <p className="text-sm text-muted-foreground break-all flex-1">{project.walletAddress}</p>
-                    <Button variant="ghost" size="icon" onClick={handleCopy}>
-                        <Copy className="h-4 w-4" />
-                    </Button>
-                </div>
-            </div>
-
-            <div className="p-6 rounded-lg border bg-card text-card-foreground">
-                <h3 className="font-semibold mb-2">External Links</h3>
-                <div className="space-y-2 flex flex-col">
-                    {project.externalLinks.map(link => (
-                        <Link key={link.title} href={link.url} target="_blank" rel="noopener noreferrer">
-                            <Button variant="link" className="p-0 h-auto">{link.title}</Button>
-                        </Link>
-                    ))}
-                </div>
-            </div>
-        </aside>
-    );
-}
 
         <InvestDialog project={project} disabled={isInvestDisabled} />
 
@@ -195,6 +144,42 @@ const ProjectSidebar = ({ project, userInvestmentAmount }: ProjectSidebarProps) 
         />
       </div>
 
+      {/* <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-3"> */}
+      {/* <h3 className="font-semibold text-center mb-4">Project Actions</h3> */}
+      <div className="p-6 rounded-lg border bg-card text-card-foreground">
+        <h3 className="font-semibold mb-2">Project Wallet</h3>
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-muted-foreground break-all flex-1">
+            {project.walletAddress}
+          </p>
+          <Button variant="ghost" size="icon" onClick={handleCopy}>
+            <Copy className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="p-6 rounded-lg border bg-card text-card-foreground">
+        <h3 className="font-semibold mb-2">External Links</h3>
+        <div className="space-y-2 flex flex-col">
+          {project.externalLinks.map((link) => (
+            <Link
+              key={link.title}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="link" className="p-0 h-auto">
+                {link.title}
+              </Button>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+};
+{
+  /* 
       <div className="p-6 rounded-lg border bg-card text-card-foreground">
         <h3 className="font-semibold mb-2">Project Wallet</h3>
         <div className="flex items-center gap-2">
@@ -225,6 +210,7 @@ const ProjectSidebar = ({ project, userInvestmentAmount }: ProjectSidebarProps) 
       </div>
     </aside>
   );
-};
+}; */
+}
 
 export default ProjectSidebar;

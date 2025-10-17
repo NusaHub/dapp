@@ -5,6 +5,7 @@ export type Milestone = {
   outputType?: "general" | "monetary";
   outputDescription?: string;
   output?: number;
+  voteCount?: number;
   // outputIDRX?: number;
 };
 
@@ -18,8 +19,8 @@ export type Comment = {
 };
 
 export type Investment = {
-    investorId: string;
-    amount: number;
+  investorId: string;
+  amount: number;
 };
 
 export type ProjectDetails = {
@@ -39,8 +40,8 @@ export type ProjectDetails = {
   milestones: Milestone[];
   comments: Comment[];
   ownerId: string;
-    investorIds: string[];
-      investments: Investment[];
+  investorIds: string[];
+  investments: Investment[];
   // fundingEndDate: Date;
   // fundingStartDate: Date;
 };

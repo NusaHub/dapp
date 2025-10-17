@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import Loading from "@/app/loading";
 
 const currentUser = {
-    id: "user456",
+  id: "user456",
 };
 
 const twoMinutesFromNow = new Date(Date.now() + 2 * 60 * 1000);
@@ -30,8 +30,8 @@ const dummyProject: ProjectDetails = {
   devName: "Nusantara Arts",
   genre: "rpg",
   gameType: "web3",
-  fundedAmount: 75000000,
-  fundingTarget: 200000000,
+  fundedAmount: 75_000_000,
+  fundingTarget: 200_000_000,
   status: "Not funded yet",
   walletAddress: "0xAbCdEf1234567890AbCdEf1234567890AbCdEf12",
   externalLinks: [
@@ -57,6 +57,10 @@ const dummyProject: ProjectDetails = {
       target: "Full release on mainnet.",
     },
   ],
+  investments: [
+    { investorId: "user456", amount: 15_000_000 },
+    { investorId: "user789", amount: 20_000_000 },
+  ],
   comments: [
     {
       id: "c1",
@@ -72,15 +76,20 @@ const dummyProject: ProjectDetails = {
           timestamp: "1 hour ago",
           text: "Thank you for your support! We're working hard on it.",
         },
-        { id: "c2", author: "Gamer B", avatarUrl: "https://placehold.co/40x40/000/FFF?text=B", timestamp: "5 hours ago", text: "What engine is this game built on?" }
-    ],
-    ownerId: "user123",
-    investments: [
-        { investorId: "user456", amount: 15000000 },
-        { investorId: "user789", amount: 20000000 },
-    ],
-    fundingStartDate: twoMinutesFromNow,
-    fundingEndDate: oneDayAfterStart,
+      ],
+    },
+    {
+      id: "c2",
+      author: "Gamer B",
+      avatarUrl: "https://placehold.co/40x40/000/FFF?text=B",
+      timestamp: "5 hours ago",
+      text: "What engine is this game built on?",
+      replies: [],
+    },
+  ],
+  paymentToken: 0,
+  ownerId: "user123",
+  investorIds: ["user456", "user789"],
 };
 
 async function generateMetadata({
@@ -154,6 +163,9 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
     fetchScProject();
   }, []);
 
+  // diganti kocak
+  const userInvestmentAmount = 0;
+
   async function mapToProjectDetails(
     scData: any,
     serverData: any
@@ -167,25 +179,6 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
         outputDescription: "",
         output: 0,
       })
-    const userInvestment = project.investments.find(
-        (inv) => inv.investorId === currentUser.id
-    );
-    const userInvestmentAmount = userInvestment ? userInvestment.amount : 0;
-
-    return (
-        <div className="container mx-auto max-w-7xl py-12 px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-                <div className="lg:col-span-2 space-y-12">
-                    <ProjectHeader project={project} />
-                    <MilestoneAccordion milestones={project.milestones} />
-                    <CommentSection comments={project.comments} />
-                </div>
-
-                <div className="lg:col-span-1">
-                    <ProjectSidebar project={project} userInvestmentAmount={userInvestmentAmount} />
-                </div>
-            </div>
-        </div>
     );
 
     const milestonesWithProgress: Milestone[] = await Promise.all(
@@ -213,6 +206,12 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
       fundedAmount: scData.fundRaised,
       paymentToken: scData.paymentToken,
       fundingTarget: scData.fundingGoal,
+      investments: [
+        {
+          investorId: "",
+          amount: 0,
+        },
+      ],
       status:
         scData.fundRaised === 0
           ? "Not funded yet"
@@ -227,8 +226,6 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
       investorIds: [], // bisa diisi dari on-chain investor list
     };
   }
-
-  // const
 
   useEffect(() => {}, [loading]);
 
@@ -246,7 +243,10 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
         </div>
 
         <div className="lg:col-span-1">
-          <ProjectSidebar project={project!} />
+          <ProjectSidebar
+            project={project}
+            userInvestmentAmount={userInvestmentAmount}
+          />
         </div>
       </div>
     </div>
