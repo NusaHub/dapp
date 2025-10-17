@@ -6,6 +6,10 @@ import ProjectSidebar from "@/components/ProjectSidebar";
 import MilestoneAccordion from "@/components/MilestoneAccordion";
 import CommentSection from "@/components/CommentSection";
 
+const currentUser = {
+    id: "user456",
+};
+
 const twoMinutesFromNow = new Date(Date.now() + 2 * 60 * 1000);
 console.log("Two minutes:", twoMinutesFromNow);
 const oneDayAfterStart = new Date(twoMinutesFromNow.getTime() + 24 * 60 * 60 * 1000);
@@ -40,7 +44,10 @@ const dummyProject: ProjectDetails = {
         { id: "c2", author: "Gamer B", avatarUrl: "https://placehold.co/40x40/000/FFF?text=B", timestamp: "5 hours ago", text: "What engine is this game built on?" }
     ],
     ownerId: "user123",
-    investorIds: ["user456", "user789"],
+    investments: [
+        { investorId: "user456", amount: 15000000 },
+        { investorId: "user789", amount: 20000000 },
+    ],
     fundingStartDate: twoMinutesFromNow,
     fundingEndDate: oneDayAfterStart,
 };
@@ -89,6 +96,11 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
     // const project = await getProjectById(params.id);
     const project = dummyProject;
 
+    const userInvestment = project.investments.find(
+        (inv) => inv.investorId === currentUser.id
+    );
+    const userInvestmentAmount = userInvestment ? userInvestment.amount : 0;
+
     return (
         <div className="container mx-auto max-w-7xl py-12 px-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
@@ -99,7 +111,7 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
                 </div>
 
                 <div className="lg:col-span-1">
-                    <ProjectSidebar project={project} />
+                    <ProjectSidebar project={project} userInvestmentAmount={userInvestmentAmount} />
                 </div>
             </div>
         </div>

@@ -17,6 +17,11 @@ export type Comment = {
     replies?: Comment[];
 };
 
+export type Investment = {
+    investorId: string;
+    amount: number;
+};
+
 export type ProjectDetails = {
     id: string;
     gameImage: string;
@@ -33,7 +38,7 @@ export type ProjectDetails = {
     milestones: Milestone[];
     comments: Comment[];
     ownerId: string;
-    investorIds: string[];
+    investments: Investment[];
     fundingEndDate: Date;
     fundingStartDate: Date;
 };

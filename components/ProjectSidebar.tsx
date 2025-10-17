@@ -10,8 +10,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
 
-const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
+interface ProjectSidebarProps {
+    project: ProjectDetails;
+    userInvestmentAmount: number;
+}
 
+const ProjectSidebar = ({ project, userInvestmentAmount }: ProjectSidebarProps) => {
     const handleCopy = () => {
         navigator.clipboard.writeText(project.walletAddress);
         toast.success("Wallet address copied to clipboard!");
@@ -50,6 +54,15 @@ const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
                     </p>
                 </div>
             </div>
+
+            {userInvestmentAmount > 0 && (
+                <div className="p-6 rounded-lg border bg-card text-card-foreground">
+                    <h3 className="font-semibold mb-2">Your Investment</h3>
+                    <p className="text-xl font-bold">
+                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(userInvestmentAmount)}
+                    </p>
+                </div>
+            )}
 
             <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-3">
                 <h3 className="font-semibold text-center mb-4">Project Actions</h3>
@@ -91,6 +104,7 @@ const ProjectSidebar = ({ project }: { project: ProjectDetails }) => {
                     </Button>
                 </div>
             </div>
+
             <div className="p-6 rounded-lg border bg-card text-card-foreground">
                 <h3 className="font-semibold mb-2">External Links</h3>
                 <div className="space-y-2 flex flex-col">

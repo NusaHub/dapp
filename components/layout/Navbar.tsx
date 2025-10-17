@@ -1,12 +1,26 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    const closeMenu = () => {
+        setIsMenuOpen(false);
+    };
+
     return (
         <header className="py-4 px-6 md:px-10 bg-background/80 backdrop-blur-sm sticky top-0 z-50 border-b border-secondary">
             <nav className="flex justify-between items-center max-w-7xl mx-auto">
-                <Link href="/" className="flex items-center">
+                <Link href="/" className="flex items-center" onClick={closeMenu}>
                     <Image
                         src="/logo.svg"
                         alt="NusaHub Logo"
@@ -24,6 +38,7 @@ const Navbar = () => {
                         priority
                     />
                 </Link>
+
                 <div className="hidden md:flex gap-6 items-center">
                     <Link href="/game-projects" className="text-muted-foreground hover:text-foreground transition-colors">
                         Game Projects
@@ -41,8 +56,66 @@ const Navbar = () => {
                         Verification
                     </Link>
                 </div>
-                <Button>Connect Wallet</Button>
+
+                <div className="hidden md:block">
+                    <Button>Connect Wallet</Button>
+                </div>
+
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden"
+                    onClick={toggleMenu}
+                    aria-label="Toggle menu"
+                >
+                    {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </Button>
             </nav>
+
+            {isMenuOpen && (
+                <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-secondary shadow-lg">
+                    <div className="flex flex-col space-y-4 p-6 max-w-7xl mx-auto">
+                        <Link
+                            href="/game-projects"
+                            className="text-muted-foreground hover:text-foreground transition-colors py-2"
+                            onClick={closeMenu}
+                        >
+                            Game Projects
+                        </Link>
+                        <Link
+                            href="/game-projects/my"
+                            className="text-muted-foreground hover:text-foreground transition-colors py-2"
+                            onClick={closeMenu}
+                        >
+                            My Game Projects
+                        </Link>
+                        <Link
+                            href="/game-projects/invested"
+                            className="text-muted-foreground hover:text-foreground transition-colors py-2"
+                            onClick={closeMenu}
+                        >
+                            Invested Game Projects
+                        </Link>
+                        <Link
+                            href="/game-projects/create"
+                            className="text-muted-foreground hover:text-foreground transition-colors py-2"
+                            onClick={closeMenu}
+                        >
+                            Create Game Project
+                        </Link>
+                        <Link
+                            href="/verification"
+                            className="text-muted-foreground hover:text-foreground transition-colors py-2"
+                            onClick={closeMenu}
+                        >
+                            Verification
+                        </Link>
+                        <Button className="mt-4" onClick={closeMenu}>
+                            Connect Wallet
+                        </Button>
+                    </div>
+                </div>
+            )}
         </header>
     );
 };
