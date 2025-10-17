@@ -6,6 +6,10 @@ import ProjectSidebar from "@/components/ProjectSidebar";
 import MilestoneAccordion from "@/components/MilestoneAccordion";
 import CommentSection from "@/components/CommentSection";
 
+const twoMinutesFromNow = new Date(Date.now() + 2 * 60 * 1000);
+console.log("Two minutes:", twoMinutesFromNow);
+const oneDayAfterStart = new Date(twoMinutesFromNow.getTime() + 24 * 60 * 60 * 1000);
+
 const dummyProject: ProjectDetails = {
     id: "1",
     gameImage: "https://placehold.co/800x450/8A42D4/FFFFFF?text=Skyborne+Legacy",
@@ -16,7 +20,7 @@ const dummyProject: ProjectDetails = {
     gameType: "web3",
     fundedAmount: 75000000,
     fundingTarget: 200000000,
-    status: "Funding",
+    status: "Not funded yet",
     walletAddress: "0xAbCdEf1234567890AbCdEf1234567890AbCdEf12",
     externalLinks: [
         { title: "Official Website", url: "#" },
@@ -36,7 +40,9 @@ const dummyProject: ProjectDetails = {
         { id: "c2", author: "Gamer B", avatarUrl: "https://placehold.co/40x40/000/FFF?text=B", timestamp: "5 hours ago", text: "What engine is this game built on?" }
     ],
     ownerId: "user123",
-    investorIds: ["user456", "user789"]
+    investorIds: ["user456", "user789"],
+    fundingStartDate: twoMinutesFromNow,
+    fundingEndDate: oneDayAfterStart,
 };
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
