@@ -31,9 +31,26 @@ const dummyProject: ProjectDetails = {
         { title: "Gameplay Trailer", url: "#" },
     ],
     milestones: [
-        { id: "m1", date: new Date("2026-01-31"), target: "Alpha Release for early backers." },
-        { id: "m2", date: new Date("2026-04-30"), target: "Beta version with core mechanics implemented.", outputType: 'general', outputDescription: "Beta version v0.8 has been delivered to all backers." },
-        { id: "m3", date: new Date("2026-08-31"), target: "Full release on mainnet." }
+        {
+            id: "m1",
+            date: new Date("2026-01-31"),
+            target: "Alpha Release for early backers.",
+            voteCount: 15
+        },
+        {
+            id: "m2",
+            date: new Date("2026-04-30"),
+            target: "Beta version with core mechanics implemented.",
+            outputType: 'general',
+            outputDescription: "Beta version v0.8 has been delivered to all backers.",
+            voteCount: 20
+        },
+        {
+            id: "m3",
+            date: new Date("2026-08-31"),
+            target: "Full release on mainnet.",
+            voteCount: 13
+        }
     ],
     comments: [
         {

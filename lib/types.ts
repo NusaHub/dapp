@@ -6,6 +6,7 @@ export type Milestone = {
     outputDescription?: string;
     outputUSDT?: number;
     outputIDRX?: number;
+    voteCount?: number;
 };
 
 export type Comment = {
