@@ -2,7 +2,7 @@ import { type ProjectDetails } from "./types";
 
 export const currentUserId = 'user-123';
 
-export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 'comments'>[] = [
+export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 'comments' | 'fundingStartDate' | 'fundingEndDate'>[] = [
     {
         id: '1',
         gameImage: 'https://placehold.co/400x200/8A42D4/FFFFFF?text=Project+A',
@@ -16,7 +16,10 @@ export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 
         walletAddress: '',
         externalLinks: [],
         ownerId: 'user-456',
-        investorIds: [currentUserId, 'user-789'],
+        investments: [
+            { investorId: currentUserId, amount: 15000000 },
+            { investorId: 'user-789', amount: 20000000 }
+        ],
     },
     {
         id: '2',
@@ -31,7 +34,9 @@ export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 
         walletAddress: '',
         externalLinks: [],
         ownerId: currentUserId,
-        investorIds: ['user-789'],
+        investments: [
+            { investorId: 'user-789', amount: 50000000 }
+        ],
     },
     {
         id: '3',
@@ -46,8 +51,8 @@ export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 
         walletAddress: '',
         externalLinks: [],
         ownerId: 'user-789',
-        investorIds: ['user-456'],
-    },
+        investments: [],
+    }, // <-- Perbaikan 2: Tambahkan kurung kurawal penutup dan koma di sini
     {
         id: '4',
         gameImage: 'https://placehold.co/400x200/16A34A/FFFFFF?text=Project+D',
@@ -61,6 +66,8 @@ export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 
         walletAddress: '',
         externalLinks: [],
         ownerId: currentUserId,
-        investorIds: [currentUserId, 'user-456'],
+        investments: [
+            { investorId: currentUserId, amount: 25000000 }
+        ],
     },
 ];
