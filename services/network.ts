@@ -1,0 +1,7 @@
+export const NUSA_GOVERNOR = "0xEe0459F485BfE87B5Bed7985cb424Ed887563D39";
+export const NUSA_HUB = "0x688c37cAdE89Ba325A6e02fe656439962e07be71";
+export const NUSA_TOKEN = "0x382bba8D249e843132226A7342CE319e2548bFA1";
+export const IDRX = "0x7Ca4B730Ca99362F6a77a67D63Ec521bC6C45f4b";
+export const USDT = "0x25BC984Ab823438f6cC64C69B36E1D87fBc59866";
+
+export const RPC_URL = "https://rpc.sepolia-api.lisk.com";
