@@ -24,7 +24,9 @@ export const metadata: Metadata = {
 
 const InvestedGameProjectsPage = () => {
 
-    const investedProjects = dummyProjects.filter(p => p.investorIds.includes(currentUserId));
+    const investedProjects = dummyProjects.filter(p =>
+        p.investments.some(inv => inv.investorId === currentUserId)
+    );
 
     return (
         <div className="container mx-auto max-w-7xl py-12 px-4 flex flex-col flex-grow">
