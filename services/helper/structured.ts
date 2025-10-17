@@ -1,11 +1,11 @@
-import { decimals } from "@/utils/helper";
+import { decimals, formatTokenAmount } from "@/utils/helper";
 
 export function structureProject(project: any) {
   return {
     name: project.name,
-    fundingGoal: project.fundingGoal / decimals(),
+    fundingGoal: formatTokenAmount(project.fundingGoal),
     paymentToken: Number(project.paymentToken),
-    fundRaised: project.fundRaised / decimals(),
+    fundRaised: formatTokenAmount(project.fundRaised),
     owner: project.owner.toString(),
     milestone: structuredProjectMilestone(project.milestone),
   };

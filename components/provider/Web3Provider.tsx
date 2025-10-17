@@ -3,7 +3,7 @@
 import React from "react";
 import { Config, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { XellarKitProvider, defaultConfig, darkTheme } from "@xellar/kit";
+import { XellarKitProvider, darkTheme, defaultConfig } from "@xellar/kit";
 import { liskSepolia } from "viem/chains";
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_REOWN_ID!;

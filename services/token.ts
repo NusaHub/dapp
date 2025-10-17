@@ -1,5 +1,5 @@
 import { config } from "@/components/provider/Web3Provider";
-import { readContract } from "wagmi/actions";
+import { readContract, writeContract } from "wagmi/actions";
 import { IDRX, NUSA_HUB, NUSA_TOKEN, USDT } from "./network";
 import { IDRX_abi } from "@/abi/IDRX_abi";
 import { USDT_abi } from "@/abi/USDT_abi";
@@ -30,7 +30,7 @@ export async function nusaBalance(address: string) {
 export async function idrxApprove(fundAmount: number) {
   try {
     const convertedFundAmount = fundAmount * decimals();
-    const balance = await readContract(config, {
+    const balance = await writeContract(config, {
       abi: IDRX_abi,
       address: IDRX,
       functionName: "approve",
@@ -49,7 +49,7 @@ export async function idrxApprove(fundAmount: number) {
 export async function usdtApprove(fundAmount: number) {
   try {
     const convertedFundAmount = fundAmount * decimals();
-    const balance = await readContract(config, {
+    const balance = await writeContract(config, {
       abi: USDT_abi,
       address: USDT,
       functionName: "approve",

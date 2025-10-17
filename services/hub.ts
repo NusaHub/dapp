@@ -1,6 +1,7 @@
 import { NusaHub_abi } from "@/abi/NusaHub_abi";
 import { config } from "@/components/provider/Web3Provider";
-import { readContract, writeContract } from "wagmi/actions";
+import { writeContract } from "wagmi/actions";
+import { readContract } from "@wagmi/core";
 import { NUSA_HUB } from "./network";
 import { decimals } from "@/utils/helper";
 import {
@@ -9,7 +10,7 @@ import {
   structureProject,
 } from "./helper/structured";
 
-// buat ngepost projek
+// buat ngepost projek (done)
 // payment token ini kalo 0 berarti IDRX, kalo 1 berarti USDT
 // WRITE FUNCTION
 export async function postProject(
@@ -119,16 +120,20 @@ export async function cashOut(projectId: number) {
   }
 }
 
-// buat fetch projek
+// buat fetch projek (done)
 // READ FUNCTION
 export async function getProject(projectId: number) {
   try {
-    const result = await readContract(config, {
+    console.log("gey");
+
+    const result = await readContract(config as any, {
       abi: NusaHub_abi,
       address: NUSA_HUB,
       functionName: "getProject",
       args: [projectId],
     });
+    console.log("gay");
+    console.log(result);
     return structureProject(result);
   } catch (error) {
     console.error(error);
@@ -255,7 +260,6 @@ export async function getAvailablePaymentToken() {
     console.error(error);
   }
 }
-
 
 // to do
 // 1. ngurangi funding kalo investor cashout
