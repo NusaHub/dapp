@@ -27,7 +27,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { projectSchema, type ProjectFormValues } from "@/lib/validation";
 import { Trash2, PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import createProjectAction from "./actions";
 import { toast } from "sonner";
@@ -42,10 +42,15 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { postProject } from "@/services/hub";
+import { getIdentity } from "@/services/identity";
+import { useAccount } from "wagmi";
+import ActionAlertDialog from "@/components/ActionAlertDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const CreateGameProjectPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const form = useForm<z.infer<typeof projectSchema>>({
     resolver: zodResolver(projectSchema),
@@ -131,6 +136,35 @@ const CreateGameProjectPage = () => {
     }
   };
 
+  const address = useAccount();
+  const [identity, setIdentity] = useState("");
+  const [showIdentityDialog, setShowIdentityDialog] = useState(false);
+
+  const fetchIdentity = async () => {
+    if (address) {
+      try {
+        const result = await getIdentity(String(address.addresses));
+        setIdentity(String(result ?? ""));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false); // baru setLoading(false) di sini
+      }
+    } else {
+      setLoading(false); // kalau address undefined
+    }
+  };
+
+  useEffect(() => {
+    fetchIdentity();
+  }, [address]);
+
+  useEffect(() => {
+    if (!loading && !identity) {
+      setShowIdentityDialog(true); // buka dialog
+    }
+  }, [identity, loading]);
+
   return (
     <div className="container mx-auto max-w-4xl py-12 px-4">
       <div className="text-center mb-12">
@@ -141,6 +175,14 @@ const CreateGameProjectPage = () => {
           Fill in the details below to get your project listed and funded.
         </p>
       </div>
+
+      <ConfirmDialog
+        open={showIdentityDialog}
+        title="Identity Verification Required"
+        description="You need to verify your identity before proceeding."
+        onConfirm={() => router.push("/verification")}
+        variant="destructive"
+      />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
