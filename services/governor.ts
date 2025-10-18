@@ -1,9 +1,13 @@
 import { NusaHub_abi } from "@/abi/NusaHub_abi";
 import { config } from "@/components/provider/Web3Provider";
-import { readContract, writeContract } from "wagmi/actions";
+import {
+  readContract,
+  waitForTransactionReceipt,
+  writeContract,
+} from "wagmi/actions";
 import { NUSA_GOVERNOR, NUSA_HUB } from "./network";
 import { NusaGovernor_abi } from "@/abi/NusaGovernor_abi";
-import { encodeFunctionData } from "viem";
+import { decodeEventLog, encodeFunctionData } from "viem";
 import { keccak256, toUtf8Bytes } from "ethers";
 import { getCountdownFromBlockNumber } from "./helper/converter";
 
@@ -24,7 +28,31 @@ export async function proposeProgress(description: string, projectId: number) {
       functionName: "proposeProgress",
       args: [[NUSA_HUB], [0], [calldata], description],
     });
-    return Number(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getProposalId(description: string, projectId: number) {
+  const calldata = encodeFunctionData({
+    abi: NusaHub_abi,
+    functionName: "processProgress",
+    args: [projectId],
+  });
+  try {
+    const result = await readContract(config, {
+      abi: NusaGovernor_abi,
+      address: NUSA_GOVERNOR,
+      functionName: "getProposalId",
+      args: [
+        [NUSA_HUB],
+        [0],
+        [calldata],
+        keccak256(toUtf8Bytes(description)),
+      ],
+    });
+    return result;
   } catch (error) {
     console.error(error);
   }
@@ -102,7 +130,7 @@ export async function proposalVotes(proposalId: number) {
 // 4 berarti Succeeded (banyak yang vote yes)
 // 7 berarti Executed (udah dieksekusi)
 // READ FUNCTION (enum)
-export async function state(proposalId: number) {
+export async function state(proposalId: BigInt) {
   try {
     const state = await readContract(config, {
       abi: NusaGovernor_abi,
@@ -110,6 +138,7 @@ export async function state(proposalId: number) {
       functionName: "state",
       args: [proposalId],
     });
+    console.log(state);
     return Number(state);
   } catch (error) {
     console.error(error);

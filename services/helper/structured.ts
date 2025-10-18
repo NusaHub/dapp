@@ -30,6 +30,6 @@ export function structuredProgress(progress: any) {
   return {
     text: progress.text,
     amount: Number(progress.amount) / decimals(),
-    proposalId: Number(progress.proposalId),
+    proposalId: BigInt(String(progress.proposalId)),
   };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Progress } from "@/components/ui/progress";
-import { type ProjectDetails } from "@/lib/types";
+import { Milestone, type ProjectDetails } from "@/lib/types";
 import { toast } from "sonner";
 import { Copy } from "lucide-react";
 import InvestDialog from "./InvestDialog";
@@ -10,13 +10,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
 import { cashOut } from "@/services/hub";
+import { useEffect, useState } from "react";
 
 interface ProjectSidebarProps {
   project: ProjectDetails;
   userInvestmentAmount: number;
 }
-
-
 
 const ProjectSidebar = ({
   project,
@@ -27,6 +26,8 @@ const ProjectSidebar = ({
     toast.success("Wallet address copied to clipboard!");
   };
   const isInvestDisabled = project.status == "Fully Funded";
+  const [isMilestoneActive, setIsMilestoneActive] = useState(false);
+  const [milestone, setMilestone] = useState<Milestone | null>(null);
 
   const onCashOut = async () => {
     toast.info("Cash out process initiated.");
@@ -37,6 +38,10 @@ const ProjectSidebar = ({
       toast.error("Cash out failed. Please try again.");
     }
   };
+
+  useEffect(() => {
+    console.log(project.milestones);
+  }, [project]);
 
   return (
     <aside className="sticky top-24 space-y-6">
