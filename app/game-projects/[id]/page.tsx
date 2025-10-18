@@ -153,6 +153,7 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
 
   const [project, setProject] = useState<ProjectDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sidebarLoading, setSidebarLoading] = useState(true);
 
   const fetchScProject = useCallback(async () => {
     try {
@@ -281,7 +282,7 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {}, [loading]);
 
-  if (!project?.milestones || loading) {
+  if (!project?.milestones || loading || sidebarLoading) {
     return <Loading />;
   }
 
@@ -306,6 +307,7 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
           <ProjectSidebar
             project={project}
             userInvestmentAmount={userInvestmentAmount}
+            setSidebarLoading={setSidebarLoading}
           />
         </div>
       </div>

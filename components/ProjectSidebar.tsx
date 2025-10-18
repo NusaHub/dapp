@@ -9,7 +9,11 @@ import ActionAlertDialog from "./ActionAlertDialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
-import { cashOut, withdrawFundsForInvestor } from "@/services/hub";
+import {
+  cashOut,
+  hasWithdrawnStatus,
+  withdrawFundsForInvestor,
+} from "@/services/hub";
 import { useEffect, useState } from "react";
 import {
   proposalDeadline,
@@ -17,26 +21,32 @@ import {
   voteProgress,
 } from "@/services/governor";
 import ConfirmDialog from "./ConfirmDialog";
+import { useAccount } from "wagmi";
 
 interface ProjectSidebarProps {
   project: ProjectDetails;
   userInvestmentAmount: number;
+  setSidebarLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProjectSidebar = ({
   project,
   userInvestmentAmount,
+  setSidebarLoading,
 }: ProjectSidebarProps) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(project.walletAddress);
     toast.success("Wallet address copied to clipboard!");
   };
   const isInvestDisabled = project.status == "Fully Funded";
-  const [isMilestoneActive, setIsMilestoneActive] = useState(false);
   const [milestone, setMilestone] = useState<Milestone | null>(null);
+  // const [loading, setLoading] = useState(true);
 
   const [pendingTimer, setPendingTimer] = useState<Date | undefined>(undefined);
   const [activeTimer, setActiveTimer] = useState<Date | undefined>(undefined);
+  const [withdrawStatus, setWithdrawStatus] = useState(false);
+
+  const address = useAccount();
 
   const onCashOut = async () => {
     toast.info("Cash out process initiated.");
@@ -49,9 +59,18 @@ const ProjectSidebar = ({
   };
 
   useEffect(() => {
+    if (!address) return;
     console.log(project.milestones);
-    fetchMilestone();
+    try {
+      fetchMilestone();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSidebarLoading(false);
+    }
   }, [project]);
+
+  useEffect(() => {}, [address]);
 
   const fetchMilestone = async () => {
     const findMilestone = project.milestones.find(
@@ -71,6 +90,13 @@ const ProjectSidebar = ({
       } else if (findMilestone.proposalStatus == 1) {
         const deadline = await proposalDeadline(findMilestone.proposalId!);
         setActiveTimer(deadline);
+      } else if (findMilestone.proposalStatus == 7) {
+        const statusWithdraw = await hasWithdrawnStatus(
+          Number(project.id)!,
+          Number(findMilestone.id),
+          String(address.addresses)
+        );
+        setWithdrawStatus(statusWithdraw!);
       }
     }
   };
@@ -189,7 +215,7 @@ const ProjectSidebar = ({
 
         <InvestDialog project={project} disabled={isInvestDisabled} />
 
-        {milestone?.proposalStatus == 7 && (
+        {milestone?.proposalStatus == 7 && !withdrawStatus && (
           <ActionAlertDialog
             triggerText="Withdraw"
             title="Are you sure you want to withdraw?"
@@ -214,7 +240,7 @@ const ProjectSidebar = ({
           onConfirm={() => onCashOut()}
           variant="destructive"
         />
-        
+
         {milestone?.proposalStatus == 1 && (
           <ActionAlertDialog
             triggerText="Vote on Milestone"
