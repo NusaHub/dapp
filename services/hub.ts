@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NusaHub_abi } from "@/abi/NusaHub_abi";
 import { config } from "@/components/provider/Web3Provider";
 import { writeContract } from "wagmi/actions";

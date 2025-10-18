@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -100,7 +101,7 @@ const CreateGameProjectPage = () => {
 
       // ganti projectId dari backend ya angka 100 ini
       const scPostProjectResult = await postProject(
-        100,
+        800,
         values.gameName,
         currency,
         values.fundingTarget,

@@ -1,7 +1,7 @@
 import { NusaHub_abi } from "@/abi/NusaHub_abi";
 import { config } from "@/components/provider/Web3Provider";
 import { readContract, writeContract } from "wagmi/actions";
-import { NUSA_GOVERNOR } from "./network";
+import { NUSA_GOVERNOR, NUSA_HUB } from "./network";
 import { NusaGovernor_abi } from "@/abi/NusaGovernor_abi";
 import { encodeFunctionData } from "viem";
 import { keccak256, toUtf8Bytes } from "ethers";
@@ -22,7 +22,7 @@ export async function proposeProgress(description: string, projectId: number) {
       abi: NusaGovernor_abi,
       address: NUSA_GOVERNOR,
       functionName: "proposeProgress",
-      args: [[NusaHub_abi], [0], [calldata], description],
+      args: [[NUSA_HUB], [0], [calldata], description],
     });
     return Number(result);
   } catch (error) {
