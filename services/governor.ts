@@ -45,12 +45,7 @@ export async function getProposalId(description: string, projectId: number) {
       abi: NusaGovernor_abi,
       address: NUSA_GOVERNOR,
       functionName: "getProposalId",
-      args: [
-        [NUSA_HUB],
-        [0],
-        [calldata],
-        keccak256(toUtf8Bytes(description)),
-      ],
+      args: [[NUSA_HUB], [0], [calldata], keccak256(toUtf8Bytes(description))],
     });
     return result;
   } catch (error) {
@@ -61,7 +56,7 @@ export async function getProposalId(description: string, projectId: number) {
 // buat voting bos progressnya
 // vote itu 0 berarti against atau nolak, 1 berarti setuju
 // WRITE FUNCTION
-export async function voteProgress(proposalId: number, vote: number) {
+export async function voteProgress(proposalId: BigInt, vote: number) {
   try {
     const result = await writeContract(config, {
       abi: NusaGovernor_abi,
@@ -151,7 +146,7 @@ export async function state(proposalId: BigInt) {
 // Countdown --> https://github.com/NusaQuest/frontend/blob/main/src/components/sections/Countdown.jsx
 // referensi kalo mau bikin countdown yang getCountdown (beda dari ini gapa kok aman) --> https://github.com/NusaQuest/frontend/blob/main/src/utils/helper.js
 // READ FUNCTION
-export async function proposalSnapshot(proposalId: number) {
+export async function proposalSnapshot(proposalId: BigInt) {
   try {
     const snapshot = await readContract(config, {
       abi: NusaGovernor_abi,
@@ -172,7 +167,7 @@ export async function proposalSnapshot(proposalId: number) {
 // Countdown --> https://github.com/NusaQuest/frontend/blob/main/src/components/sections/Countdown.jsx
 // referensi kalo mau bikin countdown yang getCountdown (beda dari ini gapa kok aman) --> https://github.com/NusaQuest/frontend/blob/main/src/utils/helper.js
 // READ FUNCTION
-export async function proposalDeadline(proposalId: number) {
+export async function proposalDeadline(proposalId: BigInt) {
   try {
     const deadline = await readContract(config, {
       abi: NusaGovernor_abi,

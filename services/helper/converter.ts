@@ -17,11 +17,11 @@ export async function getCountdownFromBlockNumber(blockNumber: number) {
       const block = await getBlock(config, {
         blockNumber: BigInt(blockNumber),
       });
-      return Number(block.timestamp);
+      return new Date(Number(block.timestamp) * 1000);
     } else {
       const diff = Number(blockNumber) - Number(currentBlockNumber);
       const estimated = now + diff * 2;
-      return estimated;
+      return new Date(Number(estimated) * 1000);
     }
   } catch (error) {
     console.error(error);

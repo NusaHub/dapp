@@ -9,8 +9,14 @@ import ActionAlertDialog from "./ActionAlertDialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
-import { cashOut } from "@/services/hub";
+import { cashOut, withdrawFundsForInvestor } from "@/services/hub";
 import { useEffect, useState } from "react";
+import {
+  proposalDeadline,
+  proposalSnapshot,
+  voteProgress,
+} from "@/services/governor";
+import ConfirmDialog from "./ConfirmDialog";
 
 interface ProjectSidebarProps {
   project: ProjectDetails;
@@ -29,6 +35,9 @@ const ProjectSidebar = ({
   const [isMilestoneActive, setIsMilestoneActive] = useState(false);
   const [milestone, setMilestone] = useState<Milestone | null>(null);
 
+  const [pendingTimer, setPendingTimer] = useState<Date | undefined>(undefined);
+  const [activeTimer, setActiveTimer] = useState<Date | undefined>(undefined);
+
   const onCashOut = async () => {
     toast.info("Cash out process initiated.");
     const result = await cashOut(Number(project.id));
@@ -41,12 +50,70 @@ const ProjectSidebar = ({
 
   useEffect(() => {
     console.log(project.milestones);
+    fetchMilestone();
   }, [project]);
+
+  const fetchMilestone = async () => {
+    const findMilestone = project.milestones.find(
+      (m: any) =>
+        m.proposalStatus === 0 ||
+        m.proposalStatus === 1 ||
+        m.proposalStatus === 3 ||
+        m.proposalStatus === 4 ||
+        m.proposalStatus === 7
+    );
+
+    if (findMilestone) {
+      setMilestone(findMilestone);
+      if (findMilestone.proposalStatus == 0) {
+        const snapshot = await proposalSnapshot(findMilestone.proposalId!);
+        setPendingTimer(snapshot);
+      } else if (findMilestone.proposalStatus == 1) {
+        const deadline = await proposalDeadline(findMilestone.proposalId!);
+        setActiveTimer(deadline);
+      }
+    }
+  };
+
+  const voting = async (support: number) => {
+    const voteResult = await voteProgress(milestone?.proposalId!, support);
+
+    if (voteResult) {
+      support == 0
+        ? toast.success("Milestone approved! Vote recorded on blockchain.")
+        : toast.error("Milestone rejected! Vote recorded on blockchain.");
+    }
+  };
+
+  const withdraw = async () => {
+    const withdrawResult = await withdrawFundsForInvestor(
+      Number(project.id)!,
+      Number(milestone!.id)
+    );
+
+    if (withdrawResult) {
+      toast.info("Withdraw process initiated.");
+    }
+  };
 
   return (
     <aside className="sticky top-24 space-y-6">
       <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-4">
         <div className="pb-4 border-b">
+          {milestone?.proposalStatus == 0 && (
+            <CountdownTimer
+              targetDate={pendingTimer!}
+              title="Vote Starts In"
+              endMessage="Voting is about to begin!"
+            />
+          )}
+          {milestone?.proposalStatus == 1 && (
+            <CountdownTimer
+              targetDate={activeTimer!}
+              title="Vote Ends In"
+              endMessage="Voting is about to end!"
+            />
+          )}
           {/* {project.status === 'Not funded yet' && (
                         <CountdownTimer
                             targetDate={project.fundingStartDate}
@@ -122,12 +189,24 @@ const ProjectSidebar = ({
 
         <InvestDialog project={project} disabled={isInvestDisabled} />
 
-        <ActionAlertDialog
-          triggerText="Withdraw"
-          title="Are you sure you want to withdraw?"
-          description="This action will initiate the milestone withdrawal process."
-          onConfirm={() => toast.info("Withdraw process initiated.")}
-        />
+        {milestone?.proposalStatus == 7 && (
+          <ActionAlertDialog
+            triggerText="Withdraw"
+            title="Are you sure you want to withdraw?"
+            description="This action will initiate the milestone withdrawal process."
+            onConfirm={() => withdraw()}
+          />
+        )}
+
+        {milestone?.proposalStatus == 4 && (
+          <ActionAlertDialog
+            triggerText="Execute"
+            title="Execute Milestone"
+            description="Confirm to start the process for this milestone."
+            onConfirm={() => withdraw()}
+          />
+        )}
+
         <ActionAlertDialog
           triggerText="Cash Out"
           title="Are you sure you want to cash out?"
@@ -135,18 +214,17 @@ const ProjectSidebar = ({
           onConfirm={() => onCashOut()}
           variant="destructive"
         />
-        <ActionAlertDialog
-          triggerText="Vote on Milestone"
-          title="Do you approve this milestone?"
-          description="Your vote will be recorded on the blockchain."
-          type="vote"
-          onApprove={() =>
-            toast.success("Milestone approved! Vote recorded on blockchain.")
-          }
-          onReject={() =>
-            toast.error("Milestone rejected! Vote recorded on blockchain.")
-          }
-        />
+        
+        {milestone?.proposalStatus == 1 && (
+          <ActionAlertDialog
+            triggerText="Vote on Milestone"
+            title="Do you approve this milestone?"
+            description="Your vote will be recorded on the blockchain."
+            type="vote"
+            onApprove={() => voting(0)}
+            onReject={() => voting(1)}
+          />
+        )}
       </div>
 
       {/* <div className="p-6 rounded-lg border bg-card text-card-foreground space-y-3"> */}
