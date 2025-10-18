@@ -80,17 +80,13 @@ export async function execute(projectId: number, description: string) {
       functionName: "processProgress",
       args: [projectId],
     });
+    console.log(await getProposalId(description, projectId));
 
     const result = await writeContract(config, {
       abi: NusaGovernor_abi,
       address: NUSA_GOVERNOR,
       functionName: "execute",
-      args: [
-        [NusaHub_abi],
-        [0],
-        [calldata],
-        keccak256(toUtf8Bytes(description)),
-      ],
+      args: [[NUSA_HUB], [0], [calldata], keccak256(toUtf8Bytes(description))],
     });
     return result;
   } catch (error) {
@@ -125,8 +121,13 @@ export async function proposalVotes(proposalId: number) {
 // 4 berarti Succeeded (banyak yang vote yes)
 // 7 berarti Executed (udah dieksekusi)
 // READ FUNCTION (enum)
-export async function state(proposalId: BigInt) {
+export async function state(proposalId: bigint) {
+  console.log("🔍 Proposal ID (raw):", proposalId);
+  console.log("Type:", typeof proposalId);
+
   try {
+    console.log("ahahhahaha");
+    console.log(proposalId);
     const state = await readContract(config, {
       abi: NusaGovernor_abi,
       address: NUSA_GOVERNOR,
@@ -137,7 +138,7 @@ export async function state(proposalId: BigInt) {
     return Number(state);
   } catch (error) {
     console.error(error);
-    return;
+    return 100;
   }
 }
 

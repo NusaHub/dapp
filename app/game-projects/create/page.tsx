@@ -101,7 +101,7 @@ const CreateGameProjectPage = () => {
 
       // ganti projectId dari backend ya angka 100 ini
       const scPostProjectResult = await postProject(
-        800,
+        3000,
         values.gameName,
         currency,
         values.fundingTarget,

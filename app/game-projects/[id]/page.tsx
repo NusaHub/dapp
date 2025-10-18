@@ -9,7 +9,7 @@ import ProjectSidebar from "@/components/ProjectSidebar";
 import MilestoneAccordion from "@/components/MilestoneAccordion";
 import CommentSection from "@/components/CommentSection";
 import { getMilestoneStatus, getProgresses, getProject } from "@/services/hub";
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Loading from "@/app/loading";
 import { state } from "@/services/governor";
 
@@ -146,21 +146,22 @@ async function generateMetadata({
   };
 }
 
-const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
+const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = React.use(params);
   // Nantinya, gunakan params.id untuk fetch data proyek dari backend
   // const project = await getProjectById(params.id);
   //   const project = dummyProject;
 
   const [project, setProject] = useState<ProjectDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [sidebarLoading, setSidebarLoading] = useState(true);
+  const [sidebarLoading, setSidebarLoading] = useState<boolean>(true);
 
   const fetchScProject = useCallback(async () => {
     try {
       setLoading(true);
       console.log("🔄 Fetching project data...");
       // ganti angkanya ya kocak
-      const result = await getProject(Number(400));
+      const result = await getProject(Number(id));
       // null diganti data dari server resultnya
       const convertedResult = await mapToProjectDetails(result, null);
       console.log("✅ Updated project data:", {
@@ -215,9 +216,9 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
       milestones.map(async (m, i) => {
         try {
           // 200 diganti ya kocak nanti
-          const result = await getProgresses(400, i);
-          const milestoneStatus = await getMilestoneStatus(400, i);
-          const proposalStatus = (await state(result!.proposalId)) || 100;
+          const result = await getProgresses(Number(id), i);
+          const milestoneStatus = await getMilestoneStatus(Number(id), i);
+          const proposalStatus = (await state(result!.proposalId));
 
           console.log(`🔍 Progress for milestone ${i}:`, result);
 
@@ -249,7 +250,7 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
     );
 
     return {
-      id: String(400), // bisa diganti dari parameter lain kalau ada ID-nya
+      id: String(id), // bisa diganti dari parameter lain kalau ada ID-nya
       gameImage: "/placeholder.png", // nanti bisa diganti dari metadata IPFS
       gameName: scData.name,
       description: "", // belum ada di contract, jadi kosong dulu
@@ -280,9 +281,11 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
     };
   }
 
-  useEffect(() => {}, [loading]);
+  useEffect(() => {
+    console.log(sidebarLoading);
+  }, [loading, sidebarLoading]);
 
-  if (!project?.milestones || loading || sidebarLoading) {
+  if (!project?.milestones || loading) {
     return <Loading />;
   }
 
@@ -293,7 +296,7 @@ const ProjectDetailPage = ({ params }: { params: { id: string } }) => {
           <ProjectHeader project={project} />
           <MilestoneAccordion
             milestones={project.milestones}
-            projectId={400} // TODO: ganti dengan Number(params.id) atau project.id yang sesuai
+            projectId={Number(id)} // TODO: ganti dengan Number(params.id) atau project.id yang sesuai
             paymentToken={project.paymentToken}
             onMilestoneUpdate={() => {
               console.log("🎯 Milestone updated, refreshing project data...");

@@ -16,6 +16,7 @@ import {
 } from "@/services/hub";
 import { useEffect, useState } from "react";
 import {
+  execute,
   proposalDeadline,
   proposalSnapshot,
   voteProgress,
@@ -59,6 +60,7 @@ const ProjectSidebar = ({
   };
 
   useEffect(() => {
+    console.log(address);
     if (!address) return;
     console.log(project.milestones);
     try {
@@ -105,7 +107,7 @@ const ProjectSidebar = ({
     const voteResult = await voteProgress(milestone?.proposalId!, support);
 
     if (voteResult) {
-      support == 0
+      support == 1
         ? toast.success("Milestone approved! Vote recorded on blockchain.")
         : toast.error("Milestone rejected! Vote recorded on blockchain.");
     }
@@ -119,6 +121,22 @@ const ProjectSidebar = ({
 
     if (withdrawResult) {
       toast.info("Withdraw process initiated.");
+    }
+  };
+
+  const executeMilestone = async () => {
+    const executeResult = await execute(
+      Number(project.id),
+      milestone?.outputDescription!
+    );
+    if (executeResult) {
+      toast.success(
+        "Milestone executed! Funds have been sent to the Developer's wallet."
+      );
+    } else {
+      toast.error(
+        "Execution failed! Please try again or check your wallet connection."
+      );
     }
   };
 
@@ -229,7 +247,7 @@ const ProjectSidebar = ({
             triggerText="Execute"
             title="Execute Milestone"
             description="Confirm to start the process for this milestone."
-            onConfirm={() => withdraw()}
+            onConfirm={() => executeMilestone()}
           />
         )}
 
@@ -247,8 +265,8 @@ const ProjectSidebar = ({
             title="Do you approve this milestone?"
             description="Your vote will be recorded on the blockchain."
             type="vote"
-            onApprove={() => voting(0)}
-            onReject={() => voting(1)}
+            onApprove={() => voting(1)}
+            onReject={() => voting(0)}
           />
         )}
       </div>
