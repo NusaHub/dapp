@@ -68,7 +68,7 @@ export async function fundProject(projectId: number, fundAmount: number) {
 export async function updateProgress(
   projectId: number,
   amount: number,
-  proposalId: BigInt,
+  proposalId: bigint,
   description: string
 ) {
   try {

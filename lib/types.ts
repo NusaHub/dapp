@@ -6,7 +6,7 @@ export type Milestone = {
   outputDescription?: string;
   output?: number;
   voteCount?: number;
-  proposalId?: BigInt;
+  proposalId?: bigint;
   status: boolean;
   proposalStatus: number;
   // outputIDRX?: number;

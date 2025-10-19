@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 "use client";
 
 import { Progress } from "@/components/ui/progress";
@@ -72,7 +77,7 @@ const ProjectSidebar = ({
     }
   }, [project]);
 
-  useEffect(() => {}, [address]);
+  useEffect(() => { }, [address]);
 
   const fetchMilestone = async () => {
     const findMilestone = project.milestones.find(
@@ -118,6 +123,7 @@ const ProjectSidebar = ({
       Number(project.id)!,
       Number(milestone!.id)
     );
+    console.log("withdrawResult:", withdrawResult);
 
     if (withdrawResult) {
       toast.info("Withdraw process initiated.");

@@ -270,8 +270,8 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
         scData.fundRaised === 0
           ? "Not funded yet"
           : scData.fundRaised >= scData.fundingGoal
-          ? "Fully Funded"
-          : "Funding",
+            ? "Fully Funded"
+            : "Funding",
       walletAddress: scData.owner,
       externalLinks: [], // nanti bisa diisi dari metadata
       milestones: milestonesWithProgress,

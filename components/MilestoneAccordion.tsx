@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -15,10 +15,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { getProposalId, proposeProgress } from "@/services/governor";
+import { getProposalId, proposeProgress, proposalVotes } from "@/services/governor";
 import { updateProgress } from "@/services/hub";
 import { idrxApprove, usdtApprove } from "@/services/token";
 import { Loader2, CheckCircle } from "lucide-react";
+import { decimals } from "@/utils/helper";
 
 interface MilestoneAccordionProps {
   milestones: Milestone[];
@@ -48,6 +49,35 @@ const MilestoneAccordion = ({
   const [formData, setFormData] = useState<
     Record<string, { description: string; amount: number }>
   >({});
+  const [voteData, setVoteData] = useState<
+    Record<string, { against: number; for: number }>
+  >({});
+
+  useEffect(() => {
+    const fetchVotes = async () => {
+      for (const milestone of milestones) {
+        if (milestone.proposalId) {
+          try {
+            const votes = await proposalVotes(BigInt(milestone.proposalId));
+            console.log("Votes for milestone", milestone.id, votes);
+            if (votes) {
+              setVoteData((prev) => ({
+                ...prev,
+                [milestone.id]: {
+                  against: Number(votes[0]) / decimals(),
+                  for: Number(votes[1]) / decimals(),
+                },
+              }));
+            }
+          } catch (error) {
+            console.error(`Error fetching votes for milestone ${milestone.id}:`, error);
+          }
+        }
+      }
+    };
+
+    fetchVotes();
+  }, [milestones]);
 
   const handleTypeChange = (
     milestoneId: string,
@@ -119,8 +149,7 @@ const MilestoneAccordion = ({
       if (approvalResult) {
         setApprovalStates((prev) => ({ ...prev, [milestoneId]: true }));
         toast.success(
-          `${
-            paymentToken === 0 ? "IDRX" : "USDT"
+          `${paymentToken === 0 ? "IDRX" : "USDT"
           } tokens approved successfully!`
         );
         console.log("✅ [Approval] Success:", approvalResult);
@@ -254,7 +283,25 @@ const MilestoneAccordion = ({
               <p>
                 <strong>Target:</strong> {milestone.target}
               </p>
-
+              {milestone.proposalId && voteData[milestone.id] && (
+                <div className="p-4 border rounded-md bg-muted/50">
+                  <h4 className="font-semibold mb-3">Vote Status</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-sm text-muted-foreground">For</span>
+                      <span className="text-lg font-bold text-green-600">
+                        {voteData[milestone.id].for}
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-muted-foreground">Against</span>
+                      <span className="text-lg font-bold text-red-600">
+                        {voteData[milestone.id].against}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="p-4 border rounded-md bg-background">
                 <h4 className="font-semibold mb-2">Milestone Output</h4>
                 {milestone.outputDescription ? (
@@ -353,7 +400,7 @@ const MilestoneAccordion = ({
                     )}
 
                     {outputTypes[milestone.id] === "monetary" &&
-                    !approvalStates[milestone.id] ? (
+                      !approvalStates[milestone.id] ? (
                       <Button
                         size="sm"
                         type="button"

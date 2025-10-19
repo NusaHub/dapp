@@ -101,7 +101,7 @@ const CreateGameProjectPage = () => {
 
       // ganti projectId dari backend ya angka 100 ini
       const scPostProjectResult = await postProject(
-        3000,
+        5000,
         values.gameName,
         currency,
         values.fundingTarget,
@@ -113,7 +113,7 @@ const CreateGameProjectPage = () => {
         console.log(scPostProjectResult);
         toast.success("Project posted successfully!");
         // diganti ya kocak angkanya
-        router.push(`/game-projects/1`);
+        router.push(`/game-projects/5000`);
       } else {
         toast.error("Failed to create project!", {
           description: "Please try again later.",
