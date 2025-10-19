@@ -126,8 +126,6 @@ export async function state(proposalId: bigint) {
   console.log("Type:", typeof proposalId);
 
   try {
-    console.log("ahahhahaha");
-    console.log(proposalId);
     const state = await readContract(config, {
       abi: NusaGovernor_abi,
       address: NUSA_GOVERNOR,
@@ -137,7 +135,7 @@ export async function state(proposalId: bigint) {
     console.log(state);
     return Number(state);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return 100;
   }
 }
