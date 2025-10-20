@@ -20,7 +20,7 @@ export async function getCountdownFromBlockNumber(blockNumber: number) {
       return new Date(Number(block.timestamp) * 1000);
     } else {
       const diff = Number(blockNumber) - Number(currentBlockNumber);
-      const estimated = now + diff * 2;
+      const estimated = now + diff * 13;
       return new Date(Number(estimated) * 1000);
     }
   } catch (error) {
