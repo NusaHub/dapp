@@ -99,5 +99,5 @@ Follow these steps to get the NusaHub dApp running on your local machine.
 
   - 🧑‍💻 **Louis Fernando** : [@LouisFernando1204](https://github.com/LouisFernando1204)
   - 🧑‍💻 **Yobel Nathaniel Filipus** : [@yebology](https://github.com/yebology)
-  - 🧑‍💻 **Kevin Christian** : [@kevinchr_dev](https://github.com/kevinchr_dev)
+  - 🧑‍💻 **Kevin Christian** : [@kevinchr-dev](https://github.com/kevinchr-dev)
   - 🧑‍💻 **Hayya U** : [@hayyaoe](https://github.com/hayyaoe)
