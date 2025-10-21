@@ -151,7 +151,7 @@ async function generateMetadata({
 
 const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = React.use(params);
-  
+
   // Nantinya, gunakan params.id untuk fetch data proyek dari backend
   // const project = await getProjectById(params.id);
   //   const project = dummyProject;
@@ -163,15 +163,14 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   const fetchScProject = useCallback(async () => {
     const projectId = (await params).id;
-    if (typeof projectId !== 'string') {
+    if (typeof projectId !== "string") {
       toast.error("Project ID tidak valid.");
       setLoading(false);
       return;
     }
 
-    //convert uuid as Uint256
     const uuidString = projectId;
-    const uuidNoHyphens = uuidString.replace(/-/g, '');
+    const uuidNoHyphens = uuidString.replace(/-/g, "");
     const uuidHex = "0x" + uuidNoHyphens;
     const uuidAsUint256 = BigInt(uuidHex);
     console.log("✅ Converted UUID to Uint256:", uuidAsUint256.toString());
@@ -182,11 +181,17 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
       console.log("✅ Fetched project data from server:", projectData);
       setServerData(projectData);
 
-      console.log(`🔄 Fetching project data from onChain for ID: ${uuidAsUint256}`);
+      console.log(
+        `🔄 Fetching project data from onChain for ID: ${uuidAsUint256}`
+      );
       // ganti angkanya ya kocak
       const result = await getProject(Number(uuidAsUint256));
       // null diganti data dari server resultnya
-      const convertedResult = await mapToProjectDetails(result, projectData, uuidAsUint256);
+      const convertedResult = await mapToProjectDetails(
+        result,
+        projectData,
+        uuidAsUint256
+      );
       console.log("✅ Updated project data:", {
         milestoneCount: convertedResult.milestones.length,
         milestonesWithOutput: convertedResult.milestones.filter(
@@ -210,7 +215,9 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
       console.error("❌ Error fetching project:", error);
     } finally {
       setLoading(false);
-      console.log(`Success fetch project data from onChain for ID: ${uuidAsUint256}`);
+      console.log(
+        `Success fetch project data from onChain for ID: ${uuidAsUint256}`
+      );
     }
   }, []);
 
@@ -223,7 +230,7 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   async function mapToProjectDetails(
     scData: any,
-    serverData: any, 
+    serverData: any,
     uuidAsUint256: any
   ): Promise<ProjectDetails> {
     const milestones: Milestone[] = scData.milestone.timestamps.map(
@@ -240,10 +247,15 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
     const milestonesWithProgress: Milestone[] = await Promise.all(
       milestones.map(async (m, i) => {
         try {
-          // 200 diganti ya kocak nanti
-          const result = await getProgresses(Number(id), i);
+          const projectId = (await params).id;
+          const uuidString = projectId;
+          const uuidNoHyphens = uuidString.replace(/-/g, "");
+          const uuidHex = "0x" + uuidNoHyphens;
+          const uuidAsUint256 = BigInt(uuidHex);
+
+          const result = await getProgresses(Number(uuidAsUint256), i);
           const milestoneStatus = await getMilestoneStatus(Number(id), i);
-          const proposalStatus = (await state(result!.proposalId));
+          const proposalStatus = await state(result!.proposalId);
 
           console.log(`🔍 Progress for milestone ${i}:`, result);
 
@@ -295,8 +307,8 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
         scData.fundRaised === 0
           ? "Not funded yet"
           : scData.fundRaised >= scData.fundingGoal
-            ? "Fully Funded"
-            : "Funding",
+          ? "Fully Funded"
+          : "Funding",
       walletAddress: scData.owner,
       externalLinks: [], // nanti bisa diisi dari metadata
       milestones: milestonesWithProgress,
