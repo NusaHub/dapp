@@ -26,128 +26,128 @@ const oneDayAfterStart = new Date(
   twoMinutesFromNow.getTime() + 24 * 60 * 60 * 1000
 );
 
-const dummyProject: ProjectDetails = {
-  id: "1",
-  gameImage: "https://placehold.co/400x450/8A42D4/FFFFFF?text=Skyborne+Legacy",
-  gameName: "Skyborne Legacy",
-  description:
-    "Skyborne Legacy is a sprawling RPG set in a mystical archipelago where ancient magic and futuristic technology collide. Players embark on a heroic journey to uncover lost artifacts, tame mythical beasts, and shape the destiny of a world torn by conflict. With a dynamic storyline, deep character customization, and a vast open world, Skyborne Legacy offers an unforgettable adventure for every player.",
-  devName: "Nusantara Arts",
-  genre: "rpg",
-  gameType: "web3",
-  fundedAmount: 75_000_000,
-  fundingTarget: 200_000_000,
-  status: "Not funded yet",
-  walletAddress: "0xAbCdEf1234567890AbCdEf1234567890AbCdEf12",
-  externalLinks: [
-    { title: "Official Website", url: "#" },
-    { title: "Gameplay Trailer", url: "#" },
-  ],
-  milestones: [
-    {
-      id: "m1",
-      date: new Date("2026-01-31"),
-      target: "Alpha Release for early backers.",
-      status: false,
-      proposalStatus: 0,
-    },
-    {
-      id: "m2",
-      date: new Date("2026-04-30"),
-      target: "Beta version with core mechanics implemented.",
-      outputType: "general",
-      outputDescription: "Beta version v0.8 has been delivered to all backers.",
-      status: false,
-      proposalStatus: 0,
-    },
-    {
-      id: "m3",
-      date: new Date("2026-08-31"),
-      target: "Full release on mainnet.",
-      status: false,
-      proposalStatus: 0,
-    },
-  ],
-  investments: [
-    { investorId: "user456", amount: 15_000_000 },
-    { investorId: "user789", amount: 20_000_000 },
-  ],
-  comments: [
-    {
-      id: "c1",
-      author: "Investor A",
-      avatarUrl: "https://placehold.co/40x40/000/FFF?text=A",
-      timestamp: "2 hours ago",
-      text: "This project looks amazing! Can't wait for the alpha.",
-      replies: [
-        {
-          id: "r1",
-          author: "Nusantara Arts",
-          avatarUrl: "https://placehold.co/40x40/8A42D4/FFF?text=D",
-          timestamp: "1 hour ago",
-          text: "Thank you for your support! We're working hard on it.",
-        },
-      ],
-    },
-    {
-      id: "c2",
-      author: "Gamer B",
-      avatarUrl: "https://placehold.co/40x40/000/FFF?text=B",
-      timestamp: "5 hours ago",
-      text: "What engine is this game built on?",
-      replies: [],
-    },
-  ],
-  paymentToken: 0,
-  ownerId: "user123",
-  investorIds: ["user456", "user789"],
-};
+// const dummyProject: ProjectDetails = {
+//   id: "1",
+//   gameImage: "https://placehold.co/400x450/8A42D4/FFFFFF?text=Skyborne+Legacy",
+//   gameName: "Skyborne Legacy",
+//   description:
+//     "Skyborne Legacy is a sprawling RPG set in a mystical archipelago where ancient magic and futuristic technology collide. Players embark on a heroic journey to uncover lost artifacts, tame mythical beasts, and shape the destiny of a world torn by conflict. With a dynamic storyline, deep character customization, and a vast open world, Skyborne Legacy offers an unforgettable adventure for every player.",
+//   devName: "Nusantara Arts",
+//   genre: "rpg",
+//   gameType: "web3",
+//   fundedAmount: 75_000_000,
+//   fundingTarget: 200_000_000,
+//   status: "Not funded yet",
+//   walletAddress: "0xAbCdEf1234567890AbCdEf1234567890AbCdEf12",
+//   externalLinks: [
+//     { title: "Official Website", url: "#" },
+//     { title: "Gameplay Trailer", url: "#" },
+//   ],
+//   milestones: [
+//     {
+//       id: "m1",
+//       date: new Date("2026-01-31"),
+//       target: "Alpha Release for early backers.",
+//       status: false,
+//       proposalStatus: 0,
+//     },
+//     {
+//       id: "m2",
+//       date: new Date("2026-04-30"),
+//       target: "Beta version with core mechanics implemented.",
+//       outputType: "general",
+//       outputDescription: "Beta version v0.8 has been delivered to all backers.",
+//       status: false,
+//       proposalStatus: 0,
+//     },
+//     {
+//       id: "m3",
+//       date: new Date("2026-08-31"),
+//       target: "Full release on mainnet.",
+//       status: false,
+//       proposalStatus: 0,
+//     },
+//   ],
+//   investments: [
+//     { investorId: "user456", amount: 15_000_000 },
+//     { investorId: "user789", amount: 20_000_000 },
+//   ],
+//   comments: [
+//     {
+//       id: "c1",
+//       author: "Investor A",
+//       avatarUrl: "https://placehold.co/40x40/000/FFF?text=A",
+//       timestamp: "2 hours ago",
+//       text: "This project looks amazing! Can't wait for the alpha.",
+//       replies: [
+//         {
+//           id: "r1",
+//           author: "Nusantara Arts",
+//           avatarUrl: "https://placehold.co/40x40/8A42D4/FFF?text=D",
+//           timestamp: "1 hour ago",
+//           text: "Thank you for your support! We're working hard on it.",
+//         },
+//       ],
+//     },
+//     {
+//       id: "c2",
+//       author: "Gamer B",
+//       avatarUrl: "https://placehold.co/40x40/000/FFF?text=B",
+//       timestamp: "5 hours ago",
+//       text: "What engine is this game built on?",
+//       replies: [],
+//     },
+//   ],
+//   paymentToken: 0,
+//   ownerId: "user123",
+//   investorIds: ["user456", "user789"],
+// };
 
-async function generateMetadata({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  // In a real app, you would fetch the project data here
-  // const project = await getProjectById(params.id);
-  const project = dummyProject; // Using dummy data for now
+// async function generateMetadata({
+//   params,
+// }: {
+//   params: { id: string };
+// }): Promise<Metadata> {
+//   // In a real app, you would fetch the project data here
+//   // const project = await getProjectById(params.id);
+//   const project = dummyProject; // Using dummy data for now
 
-  return {
-    title: `${project.gameName} - Game Project`,
-    description:
-      project.description.length > 160
-        ? project.description.substring(0, 160) + "..."
-        : project.description,
-    keywords: `${project.gameName}, ${project.devName}, ${project.genre}, ${project.gameType}, game funding, indie game, web3 gaming`,
-    alternates: {
-      canonical: `/game-projects/${params.id}`,
-    },
-    openGraph: {
-      title: `${project.gameName} - Game Project - NusaHub`,
-      description:
-        project.description.length > 160
-          ? project.description.substring(0, 160) + "..."
-          : project.description,
-      url: `https://nusahub.io/game-projects/${params.id}`,
-      images: [
-        {
-          url: project.gameImage,
-          width: 400,
-          height: 450,
-          alt: project.gameName,
-        },
-      ],
-    },
-    twitter: {
-      title: `${project.gameName} - Game Project - NusaHub`,
-      description:
-        project.description.length > 160
-          ? project.description.substring(0, 160) + "..."
-          : project.description,
-      images: [project.gameImage],
-    },
-  };
-}
+//   return {
+//     title: `${project.gameName} - Game Project`,
+//     description:
+//       project.description.length > 160
+//         ? project.description.substring(0, 160) + "..."
+//         : project.description,
+//     keywords: `${project.gameName}, ${project.devName}, ${project.genre}, ${project.gameType}, game funding, indie game, web3 gaming`,
+//     alternates: {
+//       canonical: `/game-projects/${params.id}`,
+//     },
+//     openGraph: {
+//       title: `${project.gameName} - Game Project - NusaHub`,
+//       description:
+//         project.description.length > 160
+//           ? project.description.substring(0, 160) + "..."
+//           : project.description,
+//       url: `https://nusahub.io/game-projects/${params.id}`,
+//       images: [
+//         {
+//           url: project.gameImage,
+//           width: 400,
+//           height: 450,
+//           alt: project.gameName,
+//         },
+//       ],
+//     },
+//     twitter: {
+//       title: `${project.gameName} - Game Project - NusaHub`,
+//       description:
+//         project.description.length > 160
+//           ? project.description.substring(0, 160) + "..."
+//           : project.description,
+//       images: [project.gameImage],
+//     },
+//   };
+// }
 
 const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = React.use(params);

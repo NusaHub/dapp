@@ -173,7 +173,7 @@ const VerificationPage = () => {
         toast.success("Identity Confirmed!", {
           description: "You are now a verified user.",
         });
-        router.push("/game-projects");
+        router.push("/");
       }
     } catch (error) {
       //   toast.error("Confirmation Failed", {

@@ -289,3 +289,28 @@ export const deleteProjectLink = async (id: string, linkId: string): Promise<Gen
     throw handleError(error);
   }
 };
+
+
+
+// ---
+
+// export const uploadImage(file: File): Promise<string> {
+//   const formData = new FormData();
+//   formData.append("file", file); // ganti key kalau backend kamu pakai nama lain
+
+//   const res = await fetch("http://127.0.0.1:8080/api/upload", {
+//     method: "POST",
+//     body: formData,
+//   });
+
+//   if (!res.ok) {
+//     const text = await res.text().catch(() => "");
+//     throw new Error(`Upload failed (${res.status}). ${text}`);
+//   }
+
+//   const json = await res.json();
+//   if (!json?.file_url) {
+//     throw new Error(json?.message || "Upload response missing file_url");
+//   }
+//   return json.file_url as string;
+// }

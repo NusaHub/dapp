@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+        {
         protocol: 'https',
         hostname: 'nusahub.kevinchr.com',
       }

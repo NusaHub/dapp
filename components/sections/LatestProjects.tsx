@@ -6,41 +6,41 @@ import { useEffect, useState } from "react";
 import { getAllProjects } from "@/repository/api";
 import { getProject } from "@/services/hub";
 
-const dummyProjects = [
-  {
-    id: "1",
-    imageUrl: "https://placehold.co/400x200/8A42D4/FFFFFF?text=Project+A",
-    title: "Skyborne Legacy",
-    developer: "Nusantara Arts",
-    genre: "RPG",
-    gameType: "web3",
-    status: "Funding",
-    funded: 75_000_000,
-    target: 200_000_000,
-  },
-  {
-    id: "2",
-    imageUrl: "https://placehold.co/400x200/1E40AF/FFFFFF?text=Project+B",
-    title: "Cyber Runner 2077",
-    developer: "Garuda Games",
-    genre: "Action",
-    gameType: "web3",
-    status: "Fully Funded",
-    funded: 180_000_000,
-    target: 180_000_000,
-  },
-  {
-    id: "3",
-    imageUrl: "https://placehold.co/400x200/BE123C/FFFFFF?text=Project+C",
-    title: "Archipelago Tycoon",
-    developer: "Dev Merah Putih",
-    genre: "Simulation",
-    gameType: "web2",
-    status: "Funding",
-    funded: 30_000_000,
-    target: 100_000_000,
-  },
-];
+// const dummyProjects = [
+//   {
+//     id: "1",
+//     imageUrl: "https://placehold.co/400x200/8A42D4/FFFFFF?text=Project+A",
+//     title: "Skyborne Legacy",
+//     developer: "Nusantara Arts",
+//     genre: "RPG",
+//     gameType: "web3",
+//     status: "Funding",
+//     funded: 75_000_000,
+//     target: 200_000_000,
+//   },
+//   {
+//     id: "2",
+//     imageUrl: "https://placehold.co/400x200/1E40AF/FFFFFF?text=Project+B",
+//     title: "Cyber Runner 2077",
+//     developer: "Garuda Games",
+//     genre: "Action",
+//     gameType: "web3",
+//     status: "Fully Funded",
+//     funded: 180_000_000,
+//     target: 180_000_000,
+//   },
+//   {
+//     id: "3",
+//     imageUrl: "https://placehold.co/400x200/BE123C/FFFFFF?text=Project+C",
+//     title: "Archipelago Tycoon",
+//     developer: "Dev Merah Putih",
+//     genre: "Simulation",
+//     gameType: "web2",
+//     status: "Funding",
+//     funded: 30_000_000,
+//     target: 100_000_000,
+//   },
+// ];
 
 type Project = {
   id: string;
@@ -99,7 +99,7 @@ const LatestProjects = () => {
 
         projects.push({
           id: data.id,
-          imageUrl: data.imageUrl,
+          imageUrl: data.cover_image_url,
           title: data.title,
           developer: data.developer_name,
           genre: data.genre,
