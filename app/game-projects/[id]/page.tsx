@@ -12,6 +12,9 @@ import { getMilestoneStatus, getProgresses, getProject } from "@/services/hub";
 import React, { useEffect, useState, useCallback } from "react";
 import Loading from "@/app/loading";
 import { state } from "@/services/governor";
+import { keccak256 } from "ethers";
+import { getProjectById, Project } from "@/repository/api";
+import { toast } from "sonner";
 
 const currentUser = {
   id: "user456",
@@ -148,6 +151,7 @@ async function generateMetadata({
 
 const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = React.use(params);
+  
   // Nantinya, gunakan params.id untuk fetch data proyek dari backend
   // const project = await getProjectById(params.id);
   //   const project = dummyProject;
@@ -155,15 +159,34 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [project, setProject] = useState<ProjectDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [sidebarLoading, setSidebarLoading] = useState<boolean>(true);
+  const [serverData, setServerData] = useState<Project>();
 
   const fetchScProject = useCallback(async () => {
+    const projectId = (await params).id;
+    if (typeof projectId !== 'string') {
+      toast.error("Project ID tidak valid.");
+      setLoading(false);
+      return;
+    }
+
+    //convert uuid as Uint256
+    const uuidString = projectId;
+    const uuidNoHyphens = uuidString.replace(/-/g, '');
+    const uuidHex = "0x" + uuidNoHyphens;
+    const uuidAsUint256 = BigInt(uuidHex);
+    console.log("✅ Converted UUID to Uint256:", uuidAsUint256.toString());
+
     try {
       setLoading(true);
-      console.log("🔄 Fetching project data...");
+      const projectData = await getProjectById(projectId);
+      console.log("✅ Fetched project data from server:", projectData);
+      setServerData(projectData);
+
+      console.log(`🔄 Fetching project data from onChain for ID: ${uuidAsUint256}`);
       // ganti angkanya ya kocak
-      const result = await getProject(Number(id));
+      const result = await getProject(Number(uuidAsUint256));
       // null diganti data dari server resultnya
-      const convertedResult = await mapToProjectDetails(result, null);
+      const convertedResult = await mapToProjectDetails(result, projectData, uuidAsUint256);
       console.log("✅ Updated project data:", {
         milestoneCount: convertedResult.milestones.length,
         milestonesWithOutput: convertedResult.milestones.filter(
@@ -187,6 +210,7 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
       console.error("❌ Error fetching project:", error);
     } finally {
       setLoading(false);
+      console.log(`Success fetch project data from onChain for ID: ${uuidAsUint256}`);
     }
   }, []);
 
@@ -199,7 +223,8 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   async function mapToProjectDetails(
     scData: any,
-    serverData: any
+    serverData: any, 
+    uuidAsUint256: any
   ): Promise<ProjectDetails> {
     const milestones: Milestone[] = scData.milestone.timestamps.map(
       (t: number, i: number) => ({
@@ -250,13 +275,13 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
     );
 
     return {
-      id: String(id), // bisa diganti dari parameter lain kalau ada ID-nya
-      gameImage: "/placeholder.png", // nanti bisa diganti dari metadata IPFS
+      id: String(uuidAsUint256), // bisa diganti dari parameter lain kalau ada ID-nya
+      gameImage: serverData.cover_image_url, // nanti bisa diganti dari metadata IPFS
       gameName: scData.name,
-      description: "", // belum ada di contract, jadi kosong dulu
-      devName: "", // bisa diisi dari frontend form
-      genre: "action", // sementara default
-      gameType: "web3", // default juga
+      description: serverData.description, // belum ada di contract, jadi kosong dulu
+      devName: serverData.developer_name, // bisa diisi dari frontend form
+      genre: serverData.genre, // sementara default
+      gameType: serverData.game_type, // default juga
       fundedAmount: scData.fundRaised,
       paymentToken: scData.paymentToken,
       fundingTarget: scData.fundingGoal,
@@ -277,7 +302,7 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
       milestones: milestonesWithProgress,
       comments: [], // bisa diisi dari API lain atau db
       ownerId: "raw.owner",
-      investorIds: [], // bisa diisi dari on-chain investor list
+      investorIds: serverData.investor_wallet_addresses, // bisa diisi dari on-chain investor list
     };
   }
 

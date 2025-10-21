@@ -5,7 +5,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { z } from "zod";
+import { number, z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -48,10 +48,14 @@ import { useAccount } from "wagmi";
 import ActionAlertDialog from "@/components/ActionAlertDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
+import { createProject, createProjectLink, ProjectCreate } from "@/repository/api";
+import { keccak256 } from "ethers";
+
 const CreateGameProjectPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { address } = useAccount();
 
   const form = useForm<z.infer<typeof projectSchema>>({
     resolver: zodResolver(projectSchema),
@@ -96,12 +100,38 @@ const CreateGameProjectPage = () => {
 
       const currency = values.fundingCurrency == "IDRX" ? 0 : 1;
 
-      console.log("Submitting project:", values);
+      // TODO: Ganti ini dengan logika upload file Anda
+      const coverImageUrl = "https://nusahub.kevinchr.com/placeholder-uploaded-image.jpg";
+
+      const projectApiData: ProjectCreate = {
+        title: values.gameName,
+        description: values.description,
+        developer_name: values.devName,
+        genre: values.genre,
+        game_type: values.gameType,
+        cover_image_url: coverImageUrl, // <-- Hasil upload file
+        creator_wallet_address: address ?? "" // <-- use destructured address
+      };
+
+      console.log("Submitting to backend API:", projectApiData);
+      const backendProject = await createProject(projectApiData);
+      const newProjectId = backendProject.id;
+      if (!newProjectId) {
+        throw new Error("Failed to get Project ID from backend.");
+      }
+
+      console.log(`Submitting to smart contract with ID: ${newProjectId}`);
       //   const result = await createProjectAction(values);
+
+      const uuidString = newProjectId;
+      const uuidNoHyphens = uuidString.replace(/-/g, '');
+      const uuidHex = "0x" + uuidNoHyphens;
+      const uuidAsUint256 = BigInt(uuidHex);
+      console.log(uuidAsUint256.toString());
 
       // ganti projectId dari backend ya angka 100 ini
       const scPostProjectResult = await postProject(
-        5000,
+        Number(uuidAsUint256),
         values.gameName,
         currency,
         values.fundingTarget,
@@ -110,10 +140,21 @@ const CreateGameProjectPage = () => {
       );
 
       if (scPostProjectResult) {
+        if (values.externalLinks && values.externalLinks.length > 0) {
+          console.log(`Adding ${values.externalLinks.length} external links...`);
+          await Promise.all(
+            values.externalLinks.map((link) =>
+              createProjectLink(newProjectId, {
+                name: link.title,
+                url: link.url,
+              })
+            )
+          );
+        }
         console.log(scPostProjectResult);
         toast.success("Project posted successfully!");
         // diganti ya kocak angkanya
-        router.push(`/game-projects/5000`);
+        router.push(`/game-projects/${newProjectId}`);
       } else {
         toast.error("Failed to create project!", {
           description: "Please try again later.",
@@ -137,14 +178,13 @@ const CreateGameProjectPage = () => {
     }
   };
 
-  const address = useAccount();
   const [identity, setIdentity] = useState("");
   const [showIdentityDialog, setShowIdentityDialog] = useState(false);
 
   const fetchIdentity = async () => {
     if (address) {
       try {
-        const result = await getIdentity(String(address.addresses));
+        const result = await getIdentity(String(address ?? ""));
         setIdentity(String(result ?? ""));
       } catch (err) {
         console.error(err);
@@ -155,7 +195,6 @@ const CreateGameProjectPage = () => {
       setLoading(false); // kalau address undefined
     }
   };
-
   useEffect(() => {
     fetchIdentity();
   }, [address]);
@@ -586,6 +625,7 @@ const CreateGameProjectPage = () => {
       </Form>
     </div>
   );
+
 };
 
 export default CreateGameProjectPage;
