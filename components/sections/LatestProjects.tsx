@@ -52,6 +52,7 @@ type Project = {
   funded: number;
   target: number;
   status: string;
+  payment: number;
 };
 
 const LatestProjects = () => {
