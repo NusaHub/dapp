@@ -18,3 +18,13 @@ export function truncate(
 export function decimals() {
   return 10 ** 18;
 }
+
+export function formatTokenAmount(value: bigint | number | string): number {
+  if (value === undefined || value === null) return 0;
+
+  const num = Number(value) / decimals();
+
+  if (Number.isInteger(num)) return num;
+
+  return Number(num.toFixed(2));
+}

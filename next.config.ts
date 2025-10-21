@@ -2,23 +2,31 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typescript: {
-    ignoreBuildErrors: true
+    ignoreBuildErrors: true,
   },
   eslint: {
-    ignoreDuringBuilds: true
+    ignoreDuringBuilds: true,
   },
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'placehold.co',
+        protocol: "http",
+        hostname: "172.20.10.12",
+      },
+      {
+        protocol: "https",
+        hostname: "nusahub.kevinchr.com",
+      },
+      {
+        protocol: "https",
+        hostname: "staticdelivery.nexusmods.com"
       }
     ],
   },
   devIndicators: {
-    position: 'bottom-right'
-  }
+    position: "bottom-right",
+  },
 };
 
 export default nextConfig;

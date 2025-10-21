@@ -1,11 +1,11 @@
-import { decimals } from "@/utils/helper";
+import { decimals, formatTokenAmount } from "@/utils/helper";
 
 export function structureProject(project: any) {
   return {
     name: project.name,
-    fundingGoal: project.fundingGoal / decimals(),
+    fundingGoal: formatTokenAmount(project.fundingGoal),
     paymentToken: Number(project.paymentToken),
-    fundRaised: project.fundRaised / decimals(),
+    fundRaised: formatTokenAmount(project.fundRaised),
     owner: project.owner.toString(),
     milestone: structuredProjectMilestone(project.milestone),
   };
@@ -30,6 +30,6 @@ export function structuredProgress(progress: any) {
   return {
     text: progress.text,
     amount: Number(progress.amount) / decimals(),
-    proposalId: Number(progress.proposalId),
+    proposalId: BigInt(String(progress.proposalId)),
   };
 }

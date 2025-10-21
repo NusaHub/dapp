@@ -54,9 +54,11 @@ export async function registerIdentity(hash: string) {
       functionName: "registerIdentity",
       args: [hash],
     });
+    console.log(result);
     return result;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
 
@@ -68,10 +70,11 @@ export async function registerIdentity(hash: string) {
 // READ FUNCTION
 export async function getIdentity(address: string) {
   try {
+    console.log("Getting identity for address:", address);
     const hash = await readContract(config, {
       abi: NUSA_abi,
       address: NUSA_TOKEN,
-      functionName: "registerIdentity",
+      functionName: "getIdentity",
       args: [address],
     });
     return hash;

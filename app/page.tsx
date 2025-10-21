@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import HeroSection from "@/components/sections/HeroSection";
 import LatestProjects from "@/components/sections/LatestProjects";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
+import DelegateDialog from "@/components/DelegateDialog";
 
 export const metadata: Metadata = {
   title: "NusaHub - Decentralized Game Funding Platform",
@@ -21,6 +22,7 @@ const HomePage = () => {
       <HeroSection />
       <LatestProjects />
       <WhyChooseUs />
+      <DelegateDialog />
     </main>
   )
 }
