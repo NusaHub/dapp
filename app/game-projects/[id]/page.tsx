@@ -169,10 +169,7 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
       return;
     }
 
-    const uuidString = projectId;
-    const uuidNoHyphens = uuidString.replace(/-/g, "");
-    const uuidHex = "0x" + uuidNoHyphens;
-    const uuidAsUint256 = BigInt(uuidHex);
+    const uuidAsUint256 = Number(projectId);
     console.log("✅ Converted UUID to Uint256:", uuidAsUint256.toString());
 
     try {

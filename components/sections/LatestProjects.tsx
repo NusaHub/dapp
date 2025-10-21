@@ -86,9 +86,7 @@ const LatestProjects = () => {
 
     for (const data of datas) {
       try {
-        const uuidNoHyphens = data.id.replace(/-/g, "");
-        const uuidHex = "0x" + uuidNoHyphens;
-        const uuidAsUint256 = BigInt(uuidHex);
+        const uuidAsUint256 = Number(data.id);
 
         const scProject = await getProject(Number(uuidAsUint256));
 
@@ -99,7 +97,7 @@ const LatestProjects = () => {
 
         projects.push({
           id: data.id,
-          imageUrl: data.cover_image_url,
+          imageUrl: "https://staticdelivery.nexusmods.com/mods/1704/images/thumbnails/24094/24094-1552287527-1357430160.jpeg",
           title: data.title,
           developer: data.developer_name,
           genre: data.genre,
@@ -121,42 +119,6 @@ const LatestProjects = () => {
 
     return projects;
   };
-
-  // const searchAllProjects = async (datas: any) => {
-  //   const projects = await Promise.all(
-  //     datas.map(async (data: any) => {
-  //       const uuidNoHyphens = data.id.replace(/-/g, "");
-  //       const uuidHex = "0x" + uuidNoHyphens;
-  //       const uuidAsUint256 = BigInt(uuidHex);
-  //       console.log(uuidAsUint256);
-
-  //       const scProject = await getProject(Number(uuidAsUint256));
-
-  //       if (scProject?.fundingGoal != 0 && data.imageUrl != "") {
-  //         return {
-  //           id: data.id,
-  //           imageUrl: data.imageUrl,
-  //           title: data.title,
-  //           developer: data.developer_name,
-  //           genre: data.genre,
-  //           gameType: data.game_type,
-
-  //           // data dari smart contract
-  //           funded: Number(scProject?.fundRaised ?? 0),
-  //           target: Number(scProject?.fundingGoal ?? 0),
-  //           status:
-  //             scProject?.fundRaised === 0
-  //               ? "Not funded yet"
-  //               : scProject?.fundRaised! >= scProject?.fundingGoal!
-  //               ? "Fully Funded"
-  //               : "Funding",
-  //         };
-  //       }
-  //     })
-  //   );
-
-  //   return projects;
-  // };
 
   return (
     <>

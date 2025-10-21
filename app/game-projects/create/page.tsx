@@ -48,7 +48,11 @@ import { useAccount } from "wagmi";
 import ActionAlertDialog from "@/components/ActionAlertDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
-import { createProject, createProjectLink, ProjectCreate } from "@/repository/api";
+import {
+  createProject,
+  createProjectLink,
+  ProjectCreate,
+} from "@/repository/api";
 import { keccak256 } from "ethers";
 
 const CreateGameProjectPage = () => {
@@ -102,38 +106,39 @@ const CreateGameProjectPage = () => {
 
       // TODO: Ganti ini dengan logika upload file Anda
 
-      async function uploadImage(file: File): Promise<string> {
-        const formData = new FormData();
-        formData.append("file", file); // ganti key kalau backend kamu pakai nama lain
+      // async function uploadImage(file: File): Promise<string> {
+      //   const formData = new FormData();
+      //   formData.append("file", file); // ganti key kalau backend kamu pakai nama lain
 
-        const res = await fetch("http://127.0.0.1:8080/api/upload", {
-          method: "POST",
-          body: formData,
-        });
+      //   const res = await fetch("http://172.20.10.12:8080/api/upload", {
+      //     method: "POST",
+      //     body: formData,
+      //   });
 
-        if (!res.ok) {
-          const text = await res.text().catch(() => "");
-          throw new Error(`Upload failed (${res.status}). ${text}`);
-        }
+      //   if (!res.ok) {
+      //     const text = await res.text().catch(() => "");
+      //     throw new Error(`Upload failed (${res.status}). ${text}`);
+      //   }
 
-        const json = await res.json();
-        if (!json?.file_url) {
-          throw new Error(json?.message || "Upload response missing file_url");
-        }
-        return json.file_url as string;
-      }
+      //   const json = await res.json();
+      //   if (!json?.file_url) {
+      //     throw new Error(json?.message || "Upload response missing file_url");
+      //   }
+      //   return json.file_url as string;
+      // }
 
-      // const coverImageUrl = "";
-      let coverImageUrl = "https://storage.kevinchr.com/placeholder-uploaded-image.jpg";
-      const file = (values as any).gameImage as File | undefined;
-      if (file) {
-        try {
-          coverImageUrl = await uploadImage(file);
-        } catch (e) {
-          const msg = e instanceof Error ? e.message : "Unknown error";
-          toast.error("Image upload failed", { description: msg });
-        }
-      }
+      // // const coverImageUrl = "";
+      // let coverImageUrl =
+      //   "https://staticdelivery.nexusmods.com/mods/1704/images/thumbnails/24094/24094-1552287527-1357430160.jpeg";
+      // const file = (values as any).gameImage as File | undefined;
+      // if (file) {
+      //   try {
+      //     coverImageUrl = await uploadImage(file);
+      //   } catch (e) {
+      //     const msg = e instanceof Error ? e.message : "Unknown error";
+      //     toast.error("Image upload failed", { description: msg });
+      //   }
+      // }
 
       const projectApiData: ProjectCreate = {
         title: values.gameName,
@@ -141,8 +146,8 @@ const CreateGameProjectPage = () => {
         developer_name: values.devName,
         genre: values.genre,
         game_type: values.gameType,
-        cover_image_url: coverImageUrl, // <-- Hasil upload file
-        creator_wallet_address: address ?? "" // <-- use destructured address
+        cover_image_url: "https://staticdelivery.nexusmods.com/mods/1704/images/thumbnails/24094/24094-1552287527-1357430160.jpeg", // <-- Hasil upload file
+        creator_wallet_address: address ?? "", // <-- use destructured address
       };
 
       console.log("Submitting to backend API:", projectApiData);
@@ -151,19 +156,16 @@ const CreateGameProjectPage = () => {
       if (!newProjectId) {
         throw new Error("Failed to get Project ID from backend.");
       }
+      console.log(newProjectId);
 
       console.log(`Submitting to smart contract with ID: ${newProjectId}`);
       //   const result = await createProjectAction(values);
 
-      const uuidString = newProjectId;
-      const uuidNoHyphens = uuidString.replace(/-/g, '');
-      const uuidHex = "0x" + uuidNoHyphens;
-      const uuidAsUint256 = BigInt(uuidHex);
-      console.log(uuidAsUint256.toString());
+      console.log(newProjectId.toString());
 
       // ganti projectId dari backend ya angka 100 ini
       const scPostProjectResult = await postProject(
-        Number(uuidAsUint256),
+        parseInt(newProjectId),
         values.gameName,
         currency,
         values.fundingTarget,
@@ -173,7 +175,9 @@ const CreateGameProjectPage = () => {
 
       if (scPostProjectResult) {
         if (values.externalLinks && values.externalLinks.length > 0) {
-          console.log(`Adding ${values.externalLinks.length} external links...`);
+          console.log(
+            `Adding ${values.externalLinks.length} external links...`
+          );
           await Promise.all(
             values.externalLinks.map((link) =>
               createProjectLink(newProjectId, {
@@ -659,7 +663,6 @@ const CreateGameProjectPage = () => {
       </Form>
     </div>
   );
-
 };
 
 export default CreateGameProjectPage;
