@@ -1,0 +1,73 @@
+import { type ProjectDetails } from "./types";
+
+export const currentUserId = 'user-123';
+
+export const dummyProjects: Omit<ProjectDetails, 'description' | 'milestones' | 'comments' | 'fundingStartDate' | 'fundingEndDate'>[] = [
+    {
+        id: '1',
+        gameImage: 'https://placehold.co/400x200/8A42D4/FFFFFF?text=Project+A',
+        gameName: 'Skyborne Legacy',
+        devName: 'Nusantara Arts',
+        genre: 'rpg',
+        gameType: 'web3',
+        status: 'Funding',
+        fundedAmount: 75000000,
+        fundingTarget: 200000000,
+        walletAddress: '',
+        externalLinks: [],
+        ownerId: 'user-456',
+        investments: [
+            { investorId: currentUserId, amount: 15000000 },
+            { investorId: 'user-789', amount: 20000000 }
+        ],
+    },
+    {
+        id: '2',
+        gameImage: 'https://placehold.co/400x200/1E40AF/FFFFFF?text=Project+B',
+        gameName: 'Cyber Runner 2077',
+        devName: 'Garuda Games',
+        genre: 'action',
+        gameType: 'web3',
+        status: 'Fully Funded',
+        fundedAmount: 180000000,
+        fundingTarget: 180000000,
+        walletAddress: '',
+        externalLinks: [],
+        ownerId: currentUserId,
+        investments: [
+            { investorId: 'user-789', amount: 50000000 }
+        ],
+    },
+    {
+        id: '3',
+        gameImage: 'https://placehold.co/400x200/BE123C/FFFFFF?text=Project+C',
+        gameName: 'Archipelago Tycoon',
+        devName: 'Dev Merah Putih',
+        genre: 'simulation',
+        gameType: 'web2',
+        status: 'Funding',
+        fundedAmount: 30000000,
+        fundingTarget: 100000000,
+        walletAddress: '',
+        externalLinks: [],
+        ownerId: 'user-789',
+        investments: [],
+    }, // <-- Perbaikan 2: Tambahkan kurung kurawal penutup dan koma di sini
+    {
+        id: '4',
+        gameImage: 'https://placehold.co/400x200/16A34A/FFFFFF?text=Project+D',
+        gameName: 'Sunda Warriors',
+        devName: 'Garuda Games',
+        genre: 'strategy',
+        gameType: 'web3',
+        status: 'Funding',
+        fundedAmount: 90000000,
+        fundingTarget: 150000000,
+        walletAddress: '',
+        externalLinks: [],
+        ownerId: currentUserId,
+        investments: [
+            { investorId: currentUserId, amount: 25000000 }
+        ],
+    },
+];

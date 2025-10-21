@@ -1,9 +1,66 @@
 import React from 'react'
+import { Metadata } from 'next'
+import Link from 'next/link';
+import ProjectCard from '@/components/ProjectCard';
+import { dummyProjects } from '@/lib/dummy-data';
 
-const GameProjectListPage = () => {
-    return (
-        <div>Game Project List Page</div>
-    )
+export const metadata: Metadata = {
+    title: "All Game Projects",
+    description: "Discover and support the next generation of games. Browse through innovative gaming projects seeking funding from investors on the NusaHub platform.",
+    keywords: "game projects, indie games, web3 games, game funding, blockchain gaming, gaming investment opportunities",
+    alternates: {
+        canonical: '/game-projects',
+    },
+    openGraph: {
+        title: "All Game Projects - NusaHub",
+        description: "Discover and support the next generation of games. Browse through innovative gaming projects seeking funding from investors.",
+        url: "https://nusahub.io/game-projects",
+    },
+    twitter: {
+        title: "All Game Projects - NusaHub",
+        description: "Discover and support the next generation of games. Browse through innovative gaming projects seeking funding from investors.",
+    }
 }
 
-export default GameProjectListPage
+const GameProjectsPage = () => {
+
+    const allProjects = dummyProjects;
+
+    return (
+        <div className="container mx-auto max-w-7xl py-12 px-4 flex flex-col flex-grow">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl font-extrabold tracking-tight">All Game Projects</h1>
+                <p className="mt-2 text-lg text-muted-foreground">
+                    Discover and support the next generation of games.
+                </p>
+            </div>
+
+            {allProjects.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {allProjects.map((project) => (
+                        <Link href={`/game-projects/${project.id}`} key={project.id}>
+                            <div className="h-full">
+                                <ProjectCard
+                                    imageUrl={project.gameImage}
+                                    title={project.gameName}
+                                    developer={project.devName}
+                                    genre={project.genre}
+                                    gameType={project.gameType}
+                                    status={project.status}
+                                    funded={project.fundedAmount}
+                                    target={project.fundingTarget}
+                                />
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            ) : (
+                <div className="flex-grow flex flex-col items-center justify-center">
+                    <p className="text-center text-muted-foreground">No projects found.</p>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default GameProjectsPage;
