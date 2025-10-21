@@ -38,6 +38,7 @@
 
   - 🌐 **Frontend dApp**: You are here\!
   - 🔗 **Smart Contracts**: [View Code](https://github.com/NusaHub/smart-contract)
+  - 🔧 **Backend**: [View Code](https://github.com/NusaHub/backend)
   - 📖 **Pitch Deck**: [View Presentation](https://drive.google.com/file/d/1mtMOupo4JRUDYgAhtYT0v_jRww9ZsRhE/view?usp=sharing)
 
 ## 🚀 Getting Started
