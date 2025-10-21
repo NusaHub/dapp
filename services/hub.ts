@@ -72,7 +72,7 @@ export async function updateProgress(
   description: string
 ) {
   try {
-    const convertedAmount = amount * decimals();
+    const convertedAmount = BigInt(amount) * BigInt(10 ** 18);
     const result = await writeContract(config, {
       abi: NusaHub_abi,
       address: NUSA_HUB,

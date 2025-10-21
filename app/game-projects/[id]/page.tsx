@@ -245,10 +245,7 @@ const ProjectDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
       milestones.map(async (m, i) => {
         try {
           const projectId = (await params).id;
-          const uuidString = projectId;
-          const uuidNoHyphens = uuidString.replace(/-/g, "");
-          const uuidHex = "0x" + uuidNoHyphens;
-          const uuidAsUint256 = BigInt(uuidHex);
+          const uuidAsUint256 = BigInt(projectId);
 
           const result = await getProgresses(Number(uuidAsUint256), i);
           const milestoneStatus = await getMilestoneStatus(Number(id), i);
